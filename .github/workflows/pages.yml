@@ -1,3 +1,4 @@
+# human-gate: true — deploy autorizado pelo Owner nesta execução
 name: Publicar no GitHub Pages
 
 on:
