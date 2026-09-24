@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O Capex de IA: a matemática do esbanjamento</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#0a0e17; --panel:#121826; --panel2:#1a2235; --line:#243049;
+    --text:#e8ecf4; --muted:#8b95a8; --red:#ff4d6d; --red-dim:#ff4d6d33;
+    --green:#3ddc97; --green-dim:#3ddc9733; --amber:#ffc857; --blue:#4cc9f0;
+    --purple:#b388ff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.6}
+  .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 80px}
+  header{text-align:center;padding:60px 20px 40px;border-bottom:1px solid var(--line)}
+  header .eyebrow{color:var(--red);font-size:13px;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px}
+  h1{font-size:clamp(26px,5vw,44px);font-weight:800;line-height:1.15;margin-bottom:18px}
+  h1 span{color:var(--red)}
+  header p.lead{color:var(--muted);font-size:18px;max-width:720px;margin:0 auto 28px}
+  .thesis{display:inline-block;background:var(--red-dim);border:1px solid var(--red);color:var(--red);padding:10px 22px;border-radius:999px;font-weight:600;font-size:15px}
+  h2{font-size:26px;margin:56px 0 8px;padding-bottom:10px;border-bottom:2px solid var(--line)}
+  h2 .num{color:var(--red);margin-right:8px}
+  .sub{color:var(--muted);margin-bottom:24px;font-size:15px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:28px 0}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;text-align:center}
+  .kpi .v{font-size:30px;font-weight:800;line-height:1.1}
+  .kpi .l{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:1.5px;margin-top:8px}
+  .kpi.bad .v{color:var(--red)} .kpi.good .v{color:var(--green)} .kpi.mid .v{color:var(--amber)}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;margin:18px 0}
+  .panel h3{font-size:16px;margin-bottom:14px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+  canvas{width:100%!important;max-height:420px}
+  table{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0}
+  th,td{padding:10px 8px;text-align:right;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-weight:600;text-transform:uppercase;font-size:11px;letter-spacing:1px}
+  td:first-child,th:first-child{text-align:left}
+  tr.total td{font-weight:800;border-top:2px solid var(--line);background:var(--panel2)}
+  .neg{color:var(--red);font-weight:700} .pos{color:var(--green);font-weight:700}
+  .formula{background:var(--panel2);border-left:4px solid var(--amber);padding:16px 20px;border-radius:0 10px 10px 0;font-family:ui-monospace,monospace;font-size:15px;margin:16px 0;overflow-x:auto}
+  .formula .c{color:var(--amber)}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:800px){.two-col{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px}
+  .card h3{margin-bottom:10px}
+  .card p{color:var(--muted);font-size:14px}
+  .card .tag{display:inline-block;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;padding:4px 10px;border-radius:999px;margin-bottom:10px;font-weight:700}
+  .tag.red{background:var(--red-dim);color:var(--red)}
+  .tag.green{background:var(--green-dim);color:var(--green)}
+  .tag.amber{background:rgba(255,200,87,.15);color:var(--amber)}
+  .tag.blue{background:rgba(76,201,240,.15);color:var(--blue)}
+  .tag.purple{background:rgba(179,136,255,.15);color:var(--purple)}
+  .insight{border-left:4px solid var(--red);padding:14px 18px;background:var(--red-dim);border-radius:0 10px 10px 0;margin:18px 0;color:#ffd6de}
+  .insight strong{color:var(--red)}
+  .quote{font-style:italic;color:var(--muted);border-left:3px solid var(--line);padding-left:16px;margin:20px 0}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:60px;padding-top:24px;border-top:1px solid var(--line)}
+  .bar-scroll{overflow-x:auto}
+  .toc{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:24px 0}
+  .toc a{color:var(--muted);text-decoration:none;font-size:13px;border:1px solid var(--line);padding:6px 14px;border-radius:999px;transition:.2s}
+  .toc a:hover{color:var(--text);border-color:var(--muted)}
+  .slider-row{display:flex;align-items:center;gap:14px;margin:10px 0}
+  .slider-row input{flex:1;accent-color:var(--red)}
+  .slider-row .val{font-family:ui-monospace,monospace;color:var(--amber);min-width:70px;text-align:right}
+  .small{font-size:12px;color:var(--muted)}
+  .manifesto{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:28px;margin:28px 0}
+  .manifesto h2{border:none;margin-top:0;padding-bottom:0}
+  .manifesto .assinatura{margin-top:28px;text-align:right;color:var(--muted);font-size:13px}
+  .manifesto .assinatura strong{color:var(--text);display:block;font-size:15px}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Manifesto · análise adversarial · 5 escolas econômicas · dados 2023–2030</div>
+  <h1>O capex de IA não se sustenta.<br><span>E a matemática prova.</span></h1>
+  <p class="lead">Três vírgula oito trilhões de dólares em infraestrutura, setecentos bilhões por ano no pico, para recuperar vinte centavos em cada dólar. A tecnologia é real. O esbanjamento é o problema — e quem paga a conta não é quem decide gastar.</p>
+  <div class="thesis">Tese: o que importa é a tecnologia necessária, não o exagero. Sem corpora não existem pesos.</div>
+  <nav class="toc">
+    <a href="#manifesto">Manifesto</a>
+    <a href="#numeros">Os números</a>
+    <a href="#gap">O gap</a>
+    <a href="#deprec">A esteira de depreciação</a>
+    <a href="#roi">ROI acumulado</a>
+    <a href="#escolas">5 escolas, 1 veredito</a>
+    <a href="#tecnologia">Tecnologia vs esbanjamento</a>
+    <a href="#corpora">Corpora e pesos</a>
+    <a href="#cenarios">Cenários</a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+<section id="manifesto">
+  <div class="manifesto">
+    <h2>Manifesto</h2>
+    <p>Eu assino esta tese: o capex de IA não se sustenta. Não porque a tecnologia seja falsa — ela é real, e é por isso que a bolha dói. Mas porque o gasto corre à frente da demanda, a depreciação come a receita, e a maior parte do capital está sendo alocada em capacidade sem cliente, não em capacidade sem concorrente.</p>
+    <p>O que importa é a tecnologia <strong>necessária</strong>, o suficiente. Não o exagero. Não o esbanjamento. Um data center dimensionado pela demanda que paga é investimento; um data center construído pela narrativa de AGI é especulação com nome bonito.</p>
+    <p>E o valor real não mora no hardware. Mora no corpus. Sem corpora não existem pesos — os pesos são a compressão do conhecimento humano, e o capex é só o recipiente que executa essa compressão. Gastar setecentos bilhões por ano em recipientes enquanto se disputa por conteúdo com litígios e paywalls é inverter a prioridade da cadeia inteira.</p>
+    <p>Esta página existe para que qualquer pessoa veja os números sem intermediário. Os gráficos recalculam. O simulador testa. A matemática não negocia.</p>
+    <div class="assinatura">
+      <strong>Dr. Lucas HR Almeida</strong>
+      Médico · Iniciativa VIA · São Paulo<br>
+      24 de setembro de 2026
+    </div>
+  </div>
+</section>
+
+<section id="numeros">
+  <h2><span class="num">01</span> Os números que ninguém quer ver</h2>
+  <p class="sub">Capex global de IA (US$ bi) versus receita gerada. Três cenários de receita: base, otimista e pessimista.</p>
+  <div class="kpis">
+    <div class="kpi bad"><div class="v" id="k-capex">3,8 tri</div><div class="l">Capex total 2023–2030</div></div>
+    <div class="kpi bad"><div class="v" id="k-gap">3,05 tri</div><div class="l">Gap acumulado (capex − receita)</div></div>
+    <div class="kpi mid"><div class="v" id="k-roi">19,8%</div><div class="l">ROI acumulado em 2030 (cenário base)</div></div>
+    <div class="kpi bad"><div class="v" id="k-deprec">400 bi</div><div class="l">Depreciação anual em 2030 vs 260 bi de receita</div></div>
+  </div>
+  <div class="panel">
+    <h3>Capex vs receita de IA — os três cenários</h3>
+    <canvas id="chartCapexReceita" height="120"></canvas>
+  </div>
+  <div class="panel">
+    <h3>Tabela completa (US$ bilhões)</h3>
+    <div class="bar-scroll">
+    <table id="tblNumeros">
+      <thead><tr><th>Ano</th><th>Capex</th><th>Receita base</th><th>Gap base</th><th>ROI acum. base</th><th>Depreciação</th><th>Receita otimista</th><th>Receita pessimista</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<section id="gap">
+  <h2><span class="num">02</span> O gap: a ferida aberta</h2>
+  <p class="sub">Diferença anual entre o que se gasta e o que se arrecada. No cenário base, o gap só encolhe de 520 para 440 bi — nunca zera.</p>
+  <div class="panel">
+    <h3>Gap anual por cenário</h3>
+    <canvas id="chartGap" height="120"></canvas>
+  </div>
+  <div class="insight"><strong>Leitura:</strong> mesmo no cenário otimista — receita de 1,2 trilhão em 2030, 4,6x a projeção base — o ROI acumulado chega a apenas 66%. Para fechar o gap em 2030, a receita precisaria ser <strong>2,7 vezes</strong> a projetada: o equivalente a ~18 bilhões de assinantes pagando como Netflix.</div>
+  <div class="formula">
+    <span class="c">Gap(t)</span> = Capex(t) − Receita(t)<br>
+    <span class="c">ROI acum(T)</span> = Σ Receita(t) / Σ Capex(t), &nbsp; t = 2023…T<br>
+    <span class="c">Multiplicador 2030</span> = Capex₂₀₃₀ / Receita₂₀₃₀ = 700 / 260 = <span class="c">2,69×</span>
+  </div>
+</section>
+
+<section id="deprec">
+  <h2><span class="num">03</span> A esteira de depreciação</h2>
+  <p class="sub">Chips duram ~3 anos. A cada ano, ~35% do capex do ano anterior + 25% do de dois anos atrás voltam como custo. É uma roda que acelera.</p>
+  <div class="panel">
+    <h3>Depreciação anual estimada vs receita (cenário base)</h3>
+    <canvas id="chartDeprec" height="120"></canvas>
+  </div>
+  <div class="two-col">
+    <div class="card"><h3>Por que 3 anos?</h3><p>A obsolescência não é física — é tecnológica. Um GPU de 2023 já não compete com o de 2026. O edifício dura 30 anos; a rede, 10; o chip, 3. O componente mais caro é o que envelhece mais rápido.</p></div>
+    <div class="card"><h3>O que isso significa</h3><p>Em 2030: <strong>400 bi/ano de depreciação</strong> contra 260 bi de receita. Caixa operacional negativo no complexo inteiro — antes de energia, pessoal e dívida. Você gasta para substituir o que ainda não pagou.</p></div>
+  </div>
+</section>
+
+<section id="roi">
+  <h2><span class="num">04</span> ROI acumulado: a corrida que ninguém vence</h2>
+  <p class="sub">Receita acumulada dividida pelo capex acumulado. Break-even = 100%. Nenhum cenário chega lá até 2030.</p>
+  <div class="panel">
+    <h3>ROI acumulado por cenário</h3>
+    <canvas id="chartRoi" height="120"></canvas>
+  </div>
+  <div class="kpis">
+    <div class="kpi bad"><div class="v">8,5%</div><div class="l">Cenário pessimista (2030)</div></div>
+    <div class="kpi mid"><div class="v">19,8%</div><div class="l">Cenário base (2030)</div></div>
+    <div class="kpi"><div class="v">66%</div><div class="l">Cenário otimista (2030)</div></div>
+    <div class="kpi bad"><div class="v">100%+</div><div class="l">Break-even — não atingido em nenhum</div></div>
+  </div>
+</section>
+
+<section id="escolas">
+  <h2><span class="num">05</span> Cinco escolas, um veredito</h2>
+  <p class="sub">Subagentes adversariais: cada escola defende sua tese, apresenta o contra-argumento e emite veredito. Onde convergem é onde a verdade mora.</p>
+  <div class="two-col">
+    <div class="card"><div class="tag red">Austriaca</div><h3>Malinvestimento</h3><p>Juros distorcidos alocaram capital em bens de alta ordem sem poupança real. Ferrovia 1873, rádio 1929, fibra 2001: a tecnologia sobreviveu, os investidores não. <strong>Veredito: bolha. Correção inevitável.</strong></p></div>
+    <div class="card"><div class="tag amber">Keynesiano</div><h3>Estímulo disfarçado</h3><p>Sem o capex, o PIB americano seria negativo (Q4/2025: 0,7% com ~1,5pp de data centers). Cortar agora seria suicídio macro. <strong>Veredito: segura a economia agora; transfere o risco ao fiscal.</strong></p></div>
+    <div class="card"><div class="tag blue">Monetarista</div><h3>Máquina de inflação</h3><p>Gas turbines vendidas até 2030, grid sem capacidade. Energia cara = produção cara. 4,9% do PIB em equipamentos — acima do pico de 2000. <strong>Veredito: insustentável. Aposta em deflação chegando antes da inflação de recursos.</strong></p></div>
+    <div class="card"><div class="tag purple">Institucionalista</div><h3>É sobre poder</h3><p>Quem controla chips, energia e data centers controla quem compete. IA soberana não calcula NPV — calcula vantagem estratégica. <strong>Veredito: sustentável como projeto de poder, insustentável como projeto financeiro.</strong></p></div>
+    <div class="card" style="grid-column:1/-1"><div class="tag green">Financeiro / Quant</div><h3>As contas não fecham</h3><p>Gap de 3,05 tri, ROI de 20%, depreciação acima da receita, 1/3 do capex já financiado por dívida (SPVs lastreados em GPU, take-or-pay). Damodaran: a dor será mais intensa que a pontocom porque há dívida envolvida. <strong>Veredito: matematicamente insustentável no horizonte atual.</strong></p></div>
+  </div>
+  <div class="panel" style="margin-top:18px">
+    <h3>Convergência e divergência</h3>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:12px"><strong style="color:var(--green)">Convergem:</strong> o gap é real; a depreciação acelera; há risco sistêmico (dívida, round-tripping, Nvidia como ponto único de falha); bolhas de capex terminam em correção.</p>
+    <p style="color:var(--muted);font-size:14px"><strong style="color:var(--amber)">Divergem:</strong> austríaco vs keynesiano (malinvestimento ou estímulo?); monetarista vs institucionalista (crise ou império?); financeiro vs todos (as contas não fecham vs as contas não são a pergunta certa).</p>
+  </div>
+</section>
+
+<section id="tecnologia">
+  <h2><span class="num">06</span> Tecnologia necessária vs esbanjamento</h2>
+  <p class="sub">A distinção que separa investimento de desperdício: quanto compute é preciso para a demanda real, e quanto é corrida armamentista sem cliente final.</p>
+  <div class="two-col">
+    <div class="card"><div class="tag green">Necessário</div><h3>Tecnologia a serviço da demanda</h3><p>Inferência para workloads reais: diagnóstico médico, código, atendimento, pesquisa. Capacidade dimensionada pelo uso que paga. Cada dólar de capex tem um cliente atrás. É a eletricidade: você gera o que consome, com folga prudente.</p></div>
+    <div class="card"><div class="tag red">Esbanjamento</div><h3>Capacidade sem demanda</h3><p>Data centers construídos antes de clientes a preços que justifiquem energia, chips, dívida e aluguéis. Chips envelhecendo em caixas. Gas turbines compradas para 2030. É a fibra de 1999: a tecnologia era real, a capacidade era quatro vezes a demanda.</p></div>
+  </div>
+  <div class="insight"><strong>O teste simples:</strong> se você remover a narrativa de AGI e perguntar "quem paga por esse compute amanhã?", a resposta honesta separa o necessário do esbanjado. Hoje, a maior parte do capex responde com fé, não com contrato.</div>
+  <div class="quote">"A bolha não é a tecnologia. A bolha é a distância entre o que se gasta e o que se usa."</div>
+</section>
+
+<section id="corpora">
+  <h2><span class="num">07</span> Sem corpora não existem pesos</h2>
+  <p class="sub">O valor real da IA não está no hardware — está no conhecimento humano capturado. Os pesos são a compressão estatística de séculos de texto, código, imagem e áudio. O capex é o recipiente; o corpus é o conteúdo.</p>
+  <div class="panel">
+    <h3>A cadeia de valor real</h3>
+    <div class="formula">
+      <span class="c">Valor</span> = f( Corpus × Algoritmo × Compute )<br><br>
+      Corpus: séculos de conhecimento humano escrito, falado, codificado<br>
+      Algoritmo: a arquitetura que comprime e generaliza<br>
+      Compute: o hardware que executa a inferência<br><br>
+      <span class="c">Sem corpus → não há o que comprimir → pesos aleatórios → zero valor</span>
+    </div>
+  </div>
+  <div class="two-col">
+    <div class="card"><h3>O que o capex compra</h3><p>GPUs, energia, prédios, refrigeração. Perecível em 3 anos. Substituível. Commoditizado pela China. É o custo de <em>executar</em> o conhecimento — não de <em>criá-lo</em>.</p></div>
+    <div class="card"><h3>O que o corpus é</h3><p>Irreplicável no curto prazo. Caro de obter (direitos, curadoria, tradução, verificação). É a matéria-prima que nenhum data center fabrica. Quem controla corpora de qualidade controla a base da cadeia — e isso não aparece no balanço de capex.</p></div>
+  </div>
+  <div class="insight"><strong>Implicação:</strong> gastar 700 bi/ano em hardware enquanto se disputa por corpora com litígios e paywalls é inverter a prioridade. O esbanjamento está no recipiente; o valor está no conteúdo. A empresa que entende isso aloca diferente — e sobrevive à correção.</div>
+</section>
+
+<section id="cenarios">
+  <h2><span class="num">08</span> Cenários e probabilidades</h2>
+  <p class="sub">Não é previsão — é distribuição. Três saídas possíveis, com pesos honestos.</p>
+  <div class="kpis">
+    <div class="kpi mid"><div class="v">~50%</div><div class="l">Correção de preços (−30 a −50% no Nasdaq) sem colapso sistêmico. Write-downs, cortes, infraestrutura barata vira base da próxima onda.</div></div>
+    <div class="kpi bad"><div class="v">~15%</div><div class="l">Contágio via crédito: SPVs, take-or-pay, dívida asiática → distress que vaza ao sistema financeiro. Estilo 2008, menor.</div></div>
+    <div class="kpi good"><div class="v">~35%</div><div class="l">Receita escala 2,7×. ROI fecha acima de 100%. IA vira a eletricidade do século 21 — investidores de 2024–26 pagam o preço da transição.</div></div>
+  </div>
+  <div class="panel">
+    <h3>Simulador: e se a receita crescesse X vezes?</h3>
+    <p class="small">Arraste o controle. A receita de 2030 é multiplicada pelo fator; o ROI acumulado de 2030 é recalculado em tempo real.</p>
+    <div class="slider-row">
+      <span class="small">1×</span>
+      <input type="range" id="multSlider" min="1" max="5" step="0.1" value="1">
+      <span class="small">5×</span>
+      <span class="val" id="multVal">1,0×</span>
+    </div>
+    <div class="kpis" style="margin-top:14px">
+      <div class="kpi"><div class="v" id="simReceita">260 bi</div><div class="l">Receita 2030 simulada</div></div>
+      <div class="kpi" id="simRoiBox"><div class="v" id="simRoi">19,8%</div><div class="l">ROI acumulado 2030</div></div>
+      <div class="kpi"><div class="v" id="simGap">440 bi</div><div class="l">Gap em 2030</div></div>
+      <div class="kpi" id="simBeBox"><div class="v" id="simBe">não</div><div class="l">Break-even atingido?</div></div>
+    </div>
+  </div>
+  <div class="quote">Recomendação prática: a posição "capex insustentável" é defensável como tese de risco, perigosa como aposta de timing. Reduza exposição a nomes de alavancagem pura; mantenha quem gera caixa; trate Nvidia como termômetro — quando a orientação de receita dela falhar, o sinal de ruptura chegou.</div>
+</section>
+
+<footer>
+  Manifesto assinado por Dr. Lucas HR Almeida · 24 de setembro de 2026<br>
+  Relatório adversarial · 5 escolas econômicas · cálculos em JavaScript no cliente · dados de capex/receita 2023–2030<br>
+  "O que importa é a tecnologia necessária, o suficiente — não o exagero. Sem corpora não existem pesos."
+</footer>
+</div>
+
+<script>
+const D = {"anos": [2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030], "capex": [100, 200, 375, 500, 600, 650, 680, 700], "receita_base": [10, 15, 25, 45, 80, 130, 190, 260], "receita_otimista": [10, 15, 25, 60, 150, 350, 700, 1200], "receita_pessimista": [10, 15, 25, 35, 45, 55, 65, 75], "depreciacao": [0.0, 35.0, 95.0, 181.2, 268.8, 335.0, 377.5, 400.5], "roi_base": [10.0, 8.3, 7.4, 8.1, 9.9, 12.6, 15.9, 19.8], "roi_otimista": [10.0, 8.3, 7.4, 9.4, 14.6, 25.2, 42.2, 66.0], "roi_pessimista": [10.0, 8.3, 7.4, 7.2, 7.3, 7.6, 8.1, 8.5], "gap_base": [90, 185, 350, 455, 520, 520, 490, 440], "gap_otimista": [90, 185, 350, 440, 450, 300, -20, -500], "gap_pessimista": [90, 185, 350, 465, 555, 595, 615, 625], "capex_total": 3805, "receita_total_base": 755, "gap_total": 3050, "roi_final_base": 19.8, "roi_final_otimista": 66.0, "roi_final_pessimista": 8.5, "deprec_2030": 400.5, "receita_2030": 260, "capex_2030": 700, "multiplicador": 2.69, "assinantes_netflix": 17.9}
+
+const fmt = n => (n>=1000?(n/1000).toFixed(1)+' tri':n.toLocaleString('pt-BR'));
+const money = n => n.toLocaleString('pt-BR')+' bi';
+
+document.getElementById('k-capex').textContent = fmt(D.capex_total);
+document.getElementById('k-gap').textContent = fmt(D.gap_total);
+document.getElementById('k-roi').textContent = D.roi_final_base+'%';
+document.getElementById('k-deprec').textContent = money(D.deprec_2030);
+
+const tb = document.querySelector('#tblNumeros tbody);
+D.anos.forEach((a,i)=>{
+  const tr = document.createElement('tr);
+  const gap = D.gap_base[i];
+  tr.innerHTML = `<td>${a}</td><td>${D.capex[i]}</td><td>${D.receita_base[i]}</td>
+    <td class="neg">${gap}</td><td>${D.roi_base[i]}%</td><td>${D.depreciacao[i]}</td>
+    <td>${D.receita_otimista[i]}</td><td>${D.receita_pessimista[i]}</td>`;
+  tb.appendChild(tr);
+});
+const tr = document.createElement('tr'); tr.className='total';
+tr.innerHTML = `<td>TOTAL</td><td>${D.capex_total}</td><td>${D.receita_total_base}</td>
+  <td class="neg">${D.gap_total}</td><td>${D.roi_final_base}%</td><td>${D.depreciacao[D.depreciacao.length-1]}</td>
+  <td>${D.receita_otimista[D.receita_otimista.length-1]}</td><td>${D.receita_pessimista[D.receita_pessimista.length-1]}</td>`;
+tb.appendChild(tr);
+
+const grid = {color:'#243049'};
+const common = {responsive:true, maintainAspectRatio:false,
+  plugins:{legend:{labels:{color:'#8b95a8',font:{size:12}}},
+    tooltip:{backgroundColor:'#1a2235',titleColor:'#e8ecf4',bodyColor:'#8b95a8'}},
+  scales:{x:{ticks:{color:'#8b95a8'},grid},y:{ticks:{color:'#8b95a8'},grid}};
+
+new Chart(document.getElementById('chartCapexReceita'),{type:'line',data:{
+  labels:D.anos,
+  datasets:[
+    {label:'Capex',data:D.capex,borderColor:'#ff4d6d',backgroundColor:'#ff4d6d33',tension:.3,borderWidth:3,pointRadius:4},
+    {label:'Receita (base)',data:D.receita_base,borderColor:'#3ddc97',tension:.3,borderWidth:2.5,pointRadius:4},
+    {label:'Receita (otimista)',data:D.receita_otimista,borderColor:'#3ddc97',borderDash:[6,4],tension:.3,borderWidth:1.5,pointRadius:0},
+    {label:'Receita (pessimista)',data:D.receita_pessimista,borderColor:'#8b1e3f',borderDash:[6,4],tension:.3,borderWidth:1.5,pointRadius:0},
+  ]},options:{...common,scales:{...common.scales,y:{...common.scales.y,title:{display:true,text:'US$ bilhões',color:'#8b95a8'}}}}});
+
+new Chart(document.getElementById('chartGap'),{type:'bar',data:{
+  labels:D.anos,
+  datasets:[
+    {label:'Gap (base)',data:D.gap_base,backgroundColor:'#ff4d6dcc'},
+    {label:'Gap (otimista)',data:D.gap_otimista,backgroundColor:'#3ddc97cc'},
+    {label:'Gap (pessimista)',data:D.gap_pessimista,backgroundColor:'#8b1e3fcc'},
+  ]},options:{...common,scales:{...common.scales,y:{...common.scales.y,title:{display:true,text:'US$ bilhões',color:'#8b95a8'}}}}});
+
+new Chart(document.getElementById('chartDeprec'),{type:'line',data:{
+  labels:D.anos,
+  datasets:[
+    {label:'Depreciação anual',data:D.depreciacao,borderColor:'#b388ff',backgroundColor:'#b388ff33',tension:.3,borderWidth:3,pointRadius:4},
+    {label:'Receita (base)',data:D.receita_base,borderColor:'#3ddc97',tension:.3,borderWidth:2.5,pointRadius:4},
+  ]},options:common});
+
+new Chart(document.getElementById('chartRoi'),{type:'line',data:{
+  labels:D.anos,
+  datasets:[
+    {label:'ROI otimista',data:D.roi_otimista,borderColor:'#3ddc97',tension:.3,borderWidth:2.5,pointRadius:4},
+    {label:'ROI base',data:D.roi_base,borderColor:'#ffc857',tension:.3,borderWidth:3,pointRadius:4},
+    {label:'ROI pessimista',data:D.roi_pessimista,borderColor:'#ff4d6d',tension:.3,borderWidth:2.5,pointRadius:4},
+    {label:'Break-even (100%)',data:D.anos.map(()=>100),borderColor:'#8b95a8',borderDash:[8,4],borderWidth:1.5,pointRadius:0},
+  ]},options:{...common,scales:{...common.scales,y:{...common.scales.y,max:120,title:{display:true,text:'%',color:'#8b95a8'}}}}});
+
+const slider = document.getElementById('multSlider);
+function sim(){
+  const m = parseFloat(slider.value);
+  document.getElementById('multVal').textContent = m.toFixed(1)+'×';
+  const rec2030 = D.receita_2030*m;
+  document.getElementById('simReceita').textContent = money(Math.round(rec2030));
+  let recAcc=0, capAcc=0;
+  for(let i=0;i<D.anos.length;i++){
+    capAcc += D.capex[i];
+    recAcc += (D.anos[i]<=2025?D.receita_base[i]:D.receita_base[i]*m);
+  }
+  const roi = recAcc/capAcc*100;
+  document.getElementById('simRoi').textContent = roi.toFixed(1)+'%';
+  const roiBox = document.getElementById('simRoiBox);
+  roiBox.className = 'kpi '+(roi>=100?'good':roi>=30?'mid':'bad);
+  const gap = D.capex_2030 - rec2030;
+  document.getElementById('simGap').textContent = money(Math.round(gap))+(gap<0?' (superávit)':'');
+  document.getElementById('simGap').parentElement.className = 'kpi '+(gap<0?'good':'bad);
+  const be = roi>=100;
+  document.getElementById('simBe').textContent = be?'SIM':'não';
+  document.getElementById('simBeBox').className = 'kpi '+(be?'good':'bad);
+}
+slider.addEventListener('input',sim); sim();
+</script>
+</body>
+</html>
