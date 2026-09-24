@@ -8,7 +8,7 @@
 
 A revisão interativa — tese, contas, revisão da matemática, esteira, simulador e estatuto — está em:
 
-**https://lucashralmeida.github.io/capex-ia-o-esbanjamento/**
+**https://lucashralmeida.github.io/via-hub/**
 
 O código dessa página vive em [`site/`](site/) e o GitHub Actions publica no GitHub Pages a cada push em `main`.
 
