@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #100e0c;
+  --color-panel: #1b1612;
+  --color-bone: #f3ead7;
+  --color-bone-dim: #e7dcc8;
+  --color-muted: #b5a48e;
+  --color-oxide: #d15538;
+  --color-brass: #d4b36a;
+  --color-line: #3a3128;
+  --font-serif: "Fraunces", "Iowan Old Style", Palatino, "Palatino Linotype", serif;
+  --font-sans: "Source Sans 3", "Source Sans Pro", system-ui, sans-serif;
+  --radius-card: 2px;
+}
+
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-ink);
+    color: var(--color-bone);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--color-oxide);
+    color: var(--color-bone);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+input[type="range"] {
+  appearance: none;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--color-line);
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 999px;
+  background: var(--color-oxide);
+  border: 2px solid var(--color-bone);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 999px;
+  background: var(--color-oxide);
+  border: 2px solid var(--color-bone);
+}
