@@ -36,12 +36,10 @@ jobs:
         working-directory: site
         run: npm ci && npm run build
 
-      - name: Configurar Pages
-        uses: actions/configure-pages@v5
-        with:
-          token: ${{ secrets.PAGES_TOKEN }}
-          enablement: true
-
+      # Pages já foi habilitado manualmente pelo Owner.
+      # Não usar configure-pages: a integração conectada não possui permissão
+      # administrativa para criar/consultar o site via API, embora o workflow
+      # possua pages:write para publicar o artefato.
       - name: Enviar artefato
         uses: actions/upload-pages-artifact@v3
         with:
