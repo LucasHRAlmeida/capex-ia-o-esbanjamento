@@ -8,6 +8,8 @@
 
 O código dessa página vive em [`site/`](site/) e o GitHub Actions publica no GitHub Pages a cada push em `main`.
 
+**https://lucashralmeida.github.io/capex-ia-o-esbanjamento/**
+
 O manifesto original, de página única, continua versionado em [`index.html`](index.html).
 
 ## A tese, em uma frase
