@@ -15,9 +15,9 @@ import {
   DEPREC_PUBLICADA,
   DEPREC_SL3,
   RECEITA,
-  ROI_BASE,
-  ROI_OTIMISTA,
-  ROI_PESSIMISTA,
+  COBERTURA_BASE,
+  COBERTURA_OTIMISTA,
+  COBERTURA_PESSIMISTA,
   YEARS,
   bi,
 } from "../lib/ledger";
@@ -121,12 +121,12 @@ export function DeprecChart() {
   );
 }
 
-export function RoiChart() {
+export function CoverageChart() {
   const data = YEARS.map((year, index) => ({
     year,
-    Base: ROI_BASE[index],
-    Otimista: ROI_OTIMISTA[index],
-    Pessimista: ROI_PESSIMISTA[index],
+    Base: COBERTURA_BASE[index],
+    Otimista: COBERTURA_OTIMISTA[index],
+    Pessimista: COBERTURA_PESSIMISTA[index],
     Empate: 100,
   }));
 

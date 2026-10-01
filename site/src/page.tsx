@@ -1,4 +1,4 @@
-import { CapexChart, DeprecChart, RoiChart } from "./components/ledger-charts";
+import { CapexChart, CoverageChart, DeprecChart } from "./components/ledger-charts";
 import { Simulator } from "./components/simulator";
 import {
   CAPEX,
@@ -7,7 +7,7 @@ import {
   DEPREC_SL3,
   GAP_ACUMULADO,
   RECEITA,
-  ROI_BASE,
+  COBERTURA_BASE,
   YEARS,
   bi,
 } from "./lib/ledger";
@@ -16,20 +16,45 @@ const NAV = [
   ["#tese", "Tese"],
   ["#contas", "Contas"],
   ["#revisao", "Revisão"],
+  ["#metodo", "Método e fontes"],
   ["#esteira", "Esteira"],
   ["#simulador", "Simulador"],
   ["#estatuto", "Estatuto"],
+] as const;
+
+const MODULES = [
+  ["#contas", "Economia"],
+  ["https://iniciativa-via.com/via-hub/soberania-informacional/", "Soberania"],
+  ["https://iniciativa-via.com/via-hub/via-literacia-programacao-github/", "Literacia"],
 ] as const;
 
 export function Home() {
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-20 border-b border-line bg-ink/95 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-6xl flex-col gap-1 px-5 py-3 md:flex-row md:items-center md:justify-between">
-          <a href="#topo" className="font-serif text-lg tracking-tight text-bone">
-            O título e o capex
-          </a>
-          <nav className="flex min-w-0 flex-nowrap gap-1 overflow-x-auto" aria-label="Seções">
+        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-3">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+            <a href="#topo" className="font-serif text-lg tracking-tight text-bone">
+              O título e o capex
+            </a>
+            <nav className="flex gap-1" aria-label="Módulos">
+              {MODULES.map(([href, label], index) => (
+                <a
+                  key={href}
+                  href={href}
+                  aria-current={index === 0 ? "page" : undefined}
+                  className={`border px-2.5 py-1.5 text-xs whitespace-nowrap ${
+                    index === 0
+                      ? "border-oxide bg-oxide text-bone"
+                      : "border-line text-muted hover:border-bone hover:text-bone"
+                  }`}
+                >
+                  {label}
+                </a>
+              ))}
+            </nav>
+          </div>
+          <nav className="flex min-w-0 flex-nowrap gap-1 overflow-x-auto" aria-label="Seções desta análise">
             {NAV.map(([href, label]) => (
               <a
                 key={href}
@@ -48,6 +73,7 @@ export function Home() {
         <Tese />
         <Contas />
         <Revisao />
+        <Metodo />
         <Esteira />
         <SimuladorSection />
         <Escolas />
@@ -70,16 +96,16 @@ function Hero() {
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 md:grid-cols-12 md:py-24">
         <div className="md:col-span-8">
           <p className="text-xs tracking-[0.22em] text-oxide uppercase">
-            Iniciativa VIA · terceiro objeto · revisão do manifesto
+            Iniciativa VIA · módulo Economia · auditoria do manifesto
           </p>
           <h1 className="mt-6 font-serif text-5xl leading-[1.05] font-medium tracking-tight text-bone md:text-7xl">
-            O povo não alienou o título.
-            <span className="mt-3 block text-bone-dim">O capex, por isso, não se sustenta.</span>
+            O que os números mostram.
+            <span className="mt-3 block text-bone-dim">E o que continuam sem poder provar.</span>
           </h1>
           <p className="mt-8 max-w-2xl text-xl leading-snug text-bone-dim">
-            Vários vendors disputam o mesmo produto. O ferro se compra com dívida — agora também
-            na Ásia — e pressiona capital que não decidiu o gasto. O produto que se anuncia existe
-            para substituir a força de trabalho que teria de comprá-lo.
+            A série do manifesto é um cenário autoral, não uma medição consolidada do mercado.
+            A aritmética pode ser reproduzida; o perímetro, as expectativas de receita e a vida
+            útil dos ativos permanecem hipóteses abertas.
           </p>
         </div>
         <aside className="flex flex-col justify-end border-t border-line pt-6 md:col-span-4 md:border-t-0 md:border-l md:pt-0 md:pl-8">
@@ -94,7 +120,7 @@ function Hero() {
       </div>
       <div className="mx-auto grid max-w-6xl border-t border-line sm:grid-cols-3">
         <HeroFig k="Gasto 2023–2030" v="3.805 bi" n="A soma confere." />
-        <HeroFig k="O que volta, no base" v="19,8%" n="Setecentos e cinquenta e cinco sobre três mil oitocentos e cinco." />
+        <HeroFig k="Receita / capex, no base" v="19,8%" n="Razão bruta, não ROI nem fluxo de caixa." />
         <HeroFig k="Para empatar o acumulado" v="5,0×" n="Não 2,7×. Esse outro número só cobre um ano." />
       </div>
     </section>
@@ -116,6 +142,10 @@ function Tese() {
     <section id="tese" className="scroll-mt-28 border-b border-line">
       <div className="mx-auto max-w-6xl px-5 py-16 md:py-20">
         <SectionMark n="01" title="A tese que a conta sozinha não diz" />
+        <p className="mt-6 max-w-3xl border-l-2 border-brass pl-4 text-bone-dim">
+          As quatro proposições abaixo são a interpretação normativa do autor. Não são resultados
+          deduzidos da planilha e não recebem probabilidade estatística nesta página.
+        </p>
         <div className="mt-10 grid gap-px bg-line md:grid-cols-2">
           <Claim
             n="I"
@@ -125,17 +155,17 @@ function Tese() {
           <Claim
             n="II"
             title="O mesmo produto"
-            body="Os vendors não constroem demandas distintas. Comprimem o mesmo corpus, vendem a mesma inferência e duplicam o ferro para não ficar atrás do vizinho. Capacidade sem segundo cliente não é investimento. É corrida."
+            body="Hipótese do autor: vendors comprimem corpora sobrepostos, vendem inferência substituível e podem duplicar capacidade por competição estratégica. A série não mede sobreposição de produto, utilização ou clientes."
           />
           <Claim
             n="III"
             title="A demanda que se apaga"
-            body="Se o uso anunciado é substituir quem trabalha, a receita que se espera é o salário que se extingue. Transferência não é demanda nova. O círculo não tem um comprador do lado de fora: o produto apaga a base que teria de sustentá-lo."
+            body="Hipótese do autor: se a automação reduzir renda do trabalho mais rápido do que cria produtividade, renda e demanda novas, parte da própria base pagadora se contrai. O efeito líquido depende de preços, distribuição e respostas de firmas, famílias e Estado."
           />
           <Claim
             n="IV"
             title="A dívida"
-            body="Quem decide o gasto não é quem fica com a conta. O manifesto já traz cerca de um terço do capex em dívida — veículos lastreados em processador gráfico, contratos take-or-pay. O autor acrescenta o crédito que agora também se origina na Ásia. Correção com dívida não é só queda de ação. É pressão sobre capital alheio."
+            body="Há dívida corporativa, project finance, crédito privado e SPVs no financiamento da expansão, mas a fração muda por ano e perímetro. Goldman Sachs estima 27% do capex dos hyperscalers financiado por emissão de dívida em 2025 e projeta 33% em 2026; isso não demonstra que um terço de todo o capex global já esteja endividado."
           />
         </div>
         <p className="mt-8 max-w-3xl text-bone-dim">
@@ -162,11 +192,12 @@ function Contas() {
   return (
     <section id="contas" className="scroll-mt-28 border-b border-line bg-panel">
       <div className="mx-auto max-w-6xl px-5 py-16 md:py-20">
-        <SectionMark n="02" title="Os números, como publicados" />
+        <SectionMark n="02" title="O cenário do manifesto, como publicado" />
         <p className="mt-6 max-w-3xl text-bone-dim">
-          Série do repositório do manifesto, em bilhões de dólares. Três trajetórias de receita
-          contra um único capex. Nenhuma chega ao empate em 2030. No otimista — 2.510 bi de
-          receita — ainda faltam 1.295 bi. O retorno acumulado para em 66%.
+          Série autoral do repositório, em bilhões de dólares. Ela combina anos históricos e
+          futuros sem marcar a fronteira nem citar a origem de cada observação. Serve para testar
+          uma tese sob três trajetórias de receita; não deve ser lida como consenso de mercado.
+          No cenário chamado “otimista”, a receita acumulada equivale a 66% do capex acumulado.
         </p>
         <div className="mt-8 border border-line bg-ink p-4 md:p-6">
           <CapexChart />
@@ -178,7 +209,7 @@ function Contas() {
           <table className="w-full min-w-3xl text-left text-sm">
             <thead className="bg-ink text-xs tracking-wide text-muted uppercase">
               <tr>
-                {["Ano", "Capex", "Base", "Gap", "Retorno", "Deprec. publicada", "Otimista", "Pessimista"].map(
+                {["Ano", "Capex", "Base", "Capex − receita", "Receita / capex", "Deprec. publicada", "Otimista", "Pessimista"].map(
                   (head) => (
                     <th key={head} className="px-3 py-3 font-semibold">
                       {head}
@@ -194,7 +225,7 @@ function Contas() {
                   <Td>{CAPEX[index]}</Td>
                   <Td>{RECEITA.base[index]}</Td>
                   <Td oxide>{CAPEX[index]! - RECEITA.base[index]!}</Td>
-                  <Td>{`${bi(ROI_BASE[index] ?? 0, 1)}%`}</Td>
+                  <Td>{`${bi(COBERTURA_BASE[index] ?? 0, 1)}%`}</Td>
                   <Td>{DEPREC_PUBLICADA[index]}</Td>
                   <Td>{RECEITA.otimista[index]}</Td>
                   <Td>{RECEITA.pessimista[index]}</Td>
@@ -213,6 +244,11 @@ function Contas() {
             </tbody>
           </table>
         </div>
+        <p className="mt-4 max-w-3xl text-sm text-muted">
+          “Capex − receita” não é prejuízo nem déficit de caixa: compara um investimento que gera
+          ativos duráveis com receita bruta, sem margem, opex, impostos, capital de giro, valor
+          residual ou custo de capital. A coluna é mantida apenas como identidade do cenário.
+        </p>
       </div>
     </section>
   );
@@ -230,31 +266,119 @@ function Revisao() {
         <SectionMark n="03" title="O que a revisão fez com a conta" />
         <p className="mt-6 max-w-3xl text-bone-dim">
           A aritmética interna da série confere: somas, gaps anuais, retornos acumulados,
-          heurística de depreciação. O que não confere é o slogan que cola dois denominadores
-          diferentes na mesma frase.
+          heurística de depreciação. Isso valida as operações, não as premissas nem a conclusão.
+          A revisão separa identidades matemáticas, cenários e afirmações sobre o mundo.
         </p>
         <ol className="mt-10 divide-y divide-line border-y border-line">
           <Fix
             n="01"
-            title="2,69× não fecha o buraco. Fecha um ano."
-            body="Setecentos dividido por duzentos e sessenta é 2,69. Isso iguala a receita de 2030 ao capex de 2030. O buraco acumulado é outro objeto: 3.050 bi. Para a trajetória inteira empatar com o que foi gasto, a receita de todos os anos precisa ser 5,04 vezes a base. Se só o que vem de 2026 em diante crescer, 5,33 vezes. Se só 2030 crescer — como o simulador antigo fazia — 12,7 vezes."
+            title="2,69× iguala dois valores de 2030. Não resolve a série."
+            body="Setecentos dividido por duzentos e sessenta é 2,69. Isso iguala receita e capex no ano de 2030. Para a receita acumulada igualar o capex acumulado, todos os anos precisariam valer 5,04 vezes a base. Se só 2026 em diante variar, 5,33 vezes; se apenas 2030 variar, 12,7 vezes. Nenhuma dessas identidades é, por si, break-even econômico."
           />
           <Fix
             n="02"
-            title="17,9 bilhões de assinantes é um estoque, não um mercado."
-            body="O número do arquivo sai de 3.050 bi divididos por cerca de US$ 170 ao ano — uma mensalidade na casa de US$ 14. É o que custaria, num único ano de assinaturas, tapar oito anos de buraco. O gap só de 2030, no mesmo preço, pede cerca de 2,6 bilhões de assinantes por um ano. Não são a mesma frase."
+            title="17,9 bilhões é uma equivalência de receita anual, não uma base de assinantes."
+            body="O número sai de 3.050 bi divididos por cerca de US$ 170 por assinatura-ano. Ele traduz uma diferença acumulada de oito anos em um único ano hipotético de faturamento, sem custos, impostos, churn ou capacidade de pagamento. O valor de 2030 isolado daria cerca de 2,6 bilhões de assinaturas-ano. Nenhum dos dois mede mercado endereçável."
           />
           <Fix
             n="03"
-            title="A esteira publicada é mais branda do que a vida de três anos que o texto afirma."
-            body="A regra “35% do ano anterior mais 25% de dois anos atrás” reconhece 60% de duas safras e esquece a terceira, e o ano corrente. Em linha reta de três anos, a depreciação de 2030 não é 400 bi. É 677 bi, contra 260 bi de receita. A ferida, sob a premissa do próprio manifesto, é mais funda. A série publicada continua válida como o que ela é: uma heurística, não a vida útil declarada."
+            title="Três anos é teste de estresse, não vida útil demonstrada."
+            body="A regra publicada — 35% do ano anterior mais 25% de dois anos atrás — não representa depreciação linear de três anos. Aplicar três anos a todo o capex produz 677 bi em 2030, mas mistura chips, prédios, energia e obras ainda não operacionais. Meta reporta 5,5 anos para a maior parte de servidores e rede; outras empresas usam políticas distintas. A incerteza é material."
           />
           <Fix
             n="04"
-            title="Nem todo ferro é chip. A página não finge a divisão."
-            body="Prédio dura décadas; rede, menos; processador, cerca de três anos. Uma mistura proposta — 60% silício em três anos, 40% casca em vinte — dá 482 bi de depreciação em 2030. Ainda acima da receita. É sensibilidade, não medição. A divisão real do capex não está no arquivo."
+            title="Nem todo capex é chip — e receita não se compara a depreciação como caixa."
+            body="Uma mistura ilustrativa — 60% silício em três anos, 40% casca em vinte — produz 482 bi em 2030. A divisão 60/40 não foi medida. Além disso, depreciação é despesa contábil não caixa; receita bruta acima ou abaixo dela não demonstra, sozinha, fluxo operacional positivo ou negativo."
+          />
+          <Fix
+            n="05"
+            title="19,8% é cobertura bruta, não ROI."
+            body="Setecentos e cinquenta e cinco dividido por 3.805 resulta em 19,8%. ROI exigiria ao menos lucro ou fluxo incremental no numerador e tratamento consistente de tempo, ativos residuais e custo de capital. A página passa a chamar a métrica pelo que ela é: receita acumulada dividida por capex acumulado."
           />
         </ol>
+      </div>
+    </section>
+  );
+}
+
+const SOURCES = [
+  {
+    status: "Série interna",
+    title: "dados.json · manifesto VIA",
+    detail:
+      "Origem dos vetores exibidos. Não informa fonte por linha, perímetro de “IA”, moeda constante, corte entre observado e projetado ou data-base.",
+    href: "https://github.com/LucasHRAlmeida/capex-ia-o-esbanjamento/blob/main/dados.json",
+  },
+  {
+    status: "Benchmark projetado",
+    title: "Goldman Sachs · Tracking Trillions",
+    detail:
+      "Projeta US$ 7,6 tri entre 2026–2031 e publica hipóteses de compute, data centers e energia. Mostra que valor e perímetro dependem do modelo; não valida a série VIA.",
+    href: "https://www.goldmansachs.com/insights/articles/tracking-trillions-the-assumptions-shaping-scale-of-the-ai-build-out",
+  },
+  {
+    status: "Benchmark projetado",
+    title: "McKinsey · data centers até 2030",
+    detail:
+      "Estima mais de US$ 1,7 tri globalmente, excluindo hardware de TI. A exclusão impede comparação direta com uma série que mistura infraestrutura e compute.",
+    href: "https://www.mckinsey.com/industries/private-capital/our-insights/scaling-bigger-faster-cheaper-data-centers-with-smarter-designs",
+  },
+  {
+    status: "Fonte primária",
+    title: "Meta 2025 Form 10-K · servidores e rede",
+    detail:
+      "Divulga vida útil estimada de 5,5 anos para a maior parte dos ativos de servidores e rede. É política contábil de uma empresa, não vida física universal de GPUs.",
+    href: "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/R15.htm",
+  },
+  {
+    status: "Estimativa identificada",
+    title: "Goldman Sachs · dívida ligada à IA",
+    detail:
+      "Estima emissões equivalentes a 27% do capex dos hyperscalers em 2025 e projeta 33% em 2026. O próprio recorte exclui project finance da razão.",
+    href: "https://www.goldmansachs.com/insights/goldman-sachs-exchanges/how-ai-debt-is-reshaping-the-credit-market",
+  },
+  {
+    status: "Contraponto de demanda",
+    title: "Bloomberg Intelligence · mercado de IA generativa",
+    detail:
+      "Projeta US$ 2,3 tri em 2032 num perímetro amplo. Não é comparável diretamente à “receita de IA” do manifesto, mas evidencia a dispersão das expectativas.",
+    href: "https://www.bloomberg.com/company/press/generative-ai-market-poised-to-reach-2-3-trillion-by-2032-as-agentic-systems-proliferate-and-infrastructure-demand-surges-according-to-bloomberg-intelligence/",
+  },
+] as const;
+
+function Metodo() {
+  return (
+    <section id="metodo" className="scroll-mt-28 border-b border-line bg-panel">
+      <div className="mx-auto max-w-6xl px-5 py-16 md:py-20">
+        <SectionMark n="04" title="Método e procedência" />
+        <p className="mt-6 max-w-3xl text-bone-dim">
+          Auditoria feita em 1º de outubro de 2026. “Confere” significa que a operação pode ser
+          reproduzida. “Fonte” identifica de onde veio um valor. “Benchmark” apenas delimita
+          plausibilidade: não transforma projeção em fato.
+        </p>
+        <div className="mt-8 grid gap-px bg-line md:grid-cols-2">
+          {SOURCES.map((source) => (
+            <article key={source.title} className="bg-ink p-6">
+              <p className="text-xs tracking-wide text-brass uppercase">{source.status}</p>
+              <h3 className="mt-2 font-serif text-2xl text-bone">{source.title}</h3>
+              <p className="mt-3 text-sm text-bone-dim">{source.detail}</p>
+              <a
+                className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-oxide underline decoration-oxide/50 underline-offset-4 hover:text-bone"
+                href={source.href}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Abrir fonte ↗
+              </a>
+            </article>
+          ))}
+        </div>
+        <div className="mt-8 border border-brass p-5 text-sm text-bone-dim">
+          <strong className="text-bone">Questão ainda aberta:</strong> não existe nesta série uma
+          ponte auditável entre capex global, receita incremental atribuível à IA e fluxo de caixa
+          dos mesmos agentes econômicos. Sem o mesmo perímetro nos dois lados, “sustentável” ou
+          “insustentável” permanece conclusão condicional, não prova matemática.
+        </div>
       </div>
     </section>
   );
@@ -284,7 +408,7 @@ function Esteira() {
   return (
     <section id="esteira" className="scroll-mt-28 border-b border-line bg-panel">
       <div className="mx-auto max-w-6xl px-5 py-16 md:py-20">
-        <SectionMark n="04" title="A esteira. Você gasta para repor o que ainda não pagou." />
+        <SectionMark n="05" title="Depreciação: três modelos, nenhuma certeza escondida" />
         <div className="mt-8 grid gap-10 lg:grid-cols-2">
           <div className="border border-line bg-ink p-4 md:p-6">
             <DeprecChart />
@@ -296,8 +420,9 @@ function Esteira() {
           <div>
             <p className="text-bone-dim">
               Em 2030 a receita base é 260. A depreciação que o manifesto imprime é 400. A que a
-              vida de três anos imprime é 677 — quase o capex inteiro daquele ano. Caixa negativo
-              antes de energia, gente e juro.
+              hipótese extrema de três anos sobre todo o capex imprime é 677. Isso testa
+              sensibilidade contábil; não prova caixa negativo. Receita, depreciação e capex têm
+              naturezas diferentes e só seriam comparáveis em demonstrações consistentes.
             </p>
             <ul className="mt-8 space-y-4">
               {bars.map((bar) => (
@@ -315,10 +440,10 @@ function Esteira() {
           </div>
         </div>
         <div className="mt-10 border border-line bg-ink p-4 md:p-6">
-          <RoiChart />
+          <CoverageChart />
           <p className="mt-3 text-sm text-muted">
-            Retorno acumulado. A linha de óxido tracejada é o empate, 100%. Nenhuma trajetória a
-            toca. O otimista, em 2030, está em 66%.
+            Receita acumulada / capex acumulado. A linha de óxido marca igualdade aritmética,
+            100% — não break-even econômico. O cenário otimista chega a 66% em 2030.
           </p>
         </div>
       </div>
@@ -330,11 +455,11 @@ function SimuladorSection() {
   return (
     <section id="simulador" className="scroll-mt-28 border-b border-line">
       <div className="mx-auto max-w-6xl px-5 py-16 md:py-20">
-        <SectionMark n="05" title="O círculo, em controles" />
+        <SectionMark n="06" title="O cenário, em controles" />
         <p className="mt-6 max-w-3xl text-bone-dim">
-          Três movimentos, separados de propósito. Crescer a receita testa o slogan corrigido.
-          Tratar parte dessa receita como salário substituído testa a ética. Marcar a corrida entre
-          vendors mostra o dólar que já saiu — e que não volta só porque o produto era o mesmo.
+          Três hipóteses, separadas de propósito. Crescer a receita testa a identidade corrigida.
+          Tratar parte como salário substituído e parte do capex como duplicação competitiva são
+          escolhas do usuário, não estimativas. O simulador mostra consequências, não probabilidades.
         </p>
         <div className="mt-8">
           <Simulator />
@@ -346,21 +471,21 @@ function SimuladorSection() {
 
 function Escolas() {
   const escolas = [
-    ["Austríaca", "Malinvestimento. A tecnologia sobrevive; o capital mal alocado, não. Correção inevitável."],
-    ["Keynesiana", "Estímulo que segura o produto agora e transfere o risco ao fiscal."],
-    ["Monetarista", "Máquina de inflação de recursos: energia, turbina, rede. A aposta é a deflação chegar antes."],
-    ["Institucionalista", "Sustentável como projeto de poder. Insustentável como projeto de retorno."],
-    ["Financeira", "As contas não fecham. Dívida torna a correção mais funda do que uma bolha só de ação."],
+    ["Austríaca", "Pode ler excesso de capacidade como malinvestimento; “correção inevitável” exigiria premissas de crédito, preços e demanda que a série não contém."],
+    ["Keynesiana", "Pode tratar o investimento como suporte à demanda agregada; o efeito líquido depende de importações, crowding out, produtividade e resposta fiscal."],
+    ["Monetarista", "Destaca gargalos de energia, turbinas e rede; pressão localizada de recursos não demonstra inflação geral persistente."],
+    ["Institucionalista", "Permite que capacidade seja racional como poder estratégico mesmo com retorno financeiro baixo; o modelo não quantifica esse valor."],
+    ["Financeira", "Exige fluxos, margens, custo de capital, dívida e valor terminal no mesmo perímetro. A série atual não contém dados suficientes para esse veredito."],
   ] as const;
 
   return (
     <section className="scroll-mt-28 border-b border-line bg-panel">
       <div className="mx-auto max-w-6xl px-5 py-16 md:py-20">
-        <SectionMark n="06" title="Cinco escolas, e a sexta que o autor assina" />
+        <SectionMark n="07" title="Cinco leituras — não cinco validações independentes" />
         <p className="mt-6 max-w-3xl text-sm text-muted">
-          As cinco formulações abaixo estão como o manifesto as deixou. Os fatos macro que elas
-          citam — produto trimestral, fatia de equipamento no produto, o juízo de Damodaran — não
-          foram reabertos contra a fonte primária nesta sessão.
+          As formulações abaixo são lentes interpretativas do manifesto. Elas não constituem
+          consenso entre escolas nem evidência adicional. Alegações sem fonte verificável foram
+          retiradas; o desacordo econômico permanece visível.
         </p>
         <ol className="mt-8 divide-y divide-line border-y border-line">
           {escolas.map(([nome, texto], index) => (
@@ -375,15 +500,13 @@ function Escolas() {
         <article className="mt-8 border border-oxide bg-ink p-6 md:p-8">
           <p className="text-xs tracking-[0.18em] text-oxide uppercase">Sexta · ética da titularidade</p>
           <h3 className="mt-3 font-serif text-3xl text-bone md:text-4xl">
-            Não é só que a conta não fecha. É que o negócio, no desenho anunciado, não tem a quem servir sem apagar quem pagaria.
+            A matemática disciplina a tese. Não substitui a economia.
           </h3>
           <p className="mt-4 max-w-3xl text-bone-dim">
-            O corpus não foi alienado. A interface que vende o limite comercial como limite da
-            espécie administra um vestíbulo que não lhe pertence. E o capex que corre à frente
-            dessa administração está alavancado. Onde as cinco convergem — o gap é real, a
-            depreciação acelera, bolha de capex termina em correção — a sexta acrescenta o
-            sujeito: o povo continua titular; a empresa continua administradora; a administração,
-            quando se faz passar por origem, usurpação é.
+            O argumento de titularidade, corpus e poder permanece a posição normativa do autor.
+            Já o resultado econômico depende de adoção, preços, produtividade, distribuição,
+            competição, financiamento e política pública. A página não atribui probabilidades
+            onde não há modelo estimado nem chama cenário de prova.
           </p>
         </article>
       </div>
@@ -395,30 +518,29 @@ function Estatuto() {
   return (
     <section id="estatuto" className="scroll-mt-28">
       <div className="mx-auto max-w-6xl px-5 py-16 md:py-20">
-        <SectionMark n="07" title="Estatuto desta página" />
+        <SectionMark n="08" title="Estatuto desta página" />
         <div className="mt-8 grid gap-px bg-line md:grid-cols-2">
           <Status
             k="Verificado"
-            body="Somas, gaps, retornos e a heurística 35/25 batem com o arquivo do manifesto. 700/260 = 2,69. 3.805/755 = 5,04. Depreciação em linha reta de três anos, recalculada. Texto da tese forte, lido no registro de 20 de setembro e na redação de 23."
+            body="Somas, diferenças e razões batem com o arquivo do manifesto. 700/260 = 2,69. 3.805/755 = 5,04. A heurística 35/25 foi reproduzida; cenários alternativos de depreciação foram recalculados."
           />
           <Status
             k="Inferido"
-            body="A melhor leitura conjunta é a de uma captura das condições de exercício do poder popular, financiada à frente da demanda. A dívida asiática entra como registro do autor nesta sessão, não como auditoria de contrato."
+            body="O risco de excesso de capacidade, pressão financeira e disputa por titularidade é interpretação plausível. Não decorre necessariamente da razão receita/capex e não recebe probabilidade empírica."
           />
           <Status
             k="Proposto"
-            body="A substituição de salário no simulador é identidade do argumento, não elasticidade estimada. A mistura 60/40 da depreciação é sensibilidade. A posição “capex insustentável” segue defensável como tese de risco e perigosa como aposta de timing."
+            body="Substituição de salário e duplicação competitiva no simulador são parâmetros escolhidos. A mistura 60/40 e a vida de três anos são sensibilidades. Não são estimativas centrais."
           />
           <Status
             k="Lacuna"
-            body="Fontes primárias dos indicadores macro citados pelas cinco escolas. Divisão medida entre chip e casca. Volume e jurisdição do crédito asiático. Áudio bruto que a tese forte já marcava como ausente."
+            body="Fonte linha a linha da série; definição comum de capex e receita; corte observado/projetado; margens, opex, impostos, valor residual, custo de capital; divisão medida dos ativos; distribuição probabilística calibrada."
           />
         </div>
         <div className="mt-10 max-w-3xl">
           <p className="font-serif text-2xl leading-snug text-bone">
-            O que importa é a tecnologia necessária, o suficiente — não o exagero. Sem corpora não
-            existem pesos. E sem o trabalho que o produto pretende aposentar, não existe quem pague
-            o recipiente.
+            Tese do autor: o que importa é a tecnologia necessária, o suficiente — não o exagero.
+            A auditoria preserva essa hipótese sem converter expectativa humana em certeza numérica.
           </p>
           <p className="mt-6 text-bone">
             Dr. Lucas HR Almeida
@@ -428,7 +550,7 @@ function Estatuto() {
           </p>
           <p className="mt-4 text-sm text-muted">
             Manifesto de origem: repositório capex-ia-o-esbanjamento, 24 de setembro de 2026.
-            Soberania informacional em iniciativa-via.com.
+            Auditoria econômica: 1º de outubro de 2026. Soberania informacional em iniciativa-via.com.
           </p>
         </div>
       </div>

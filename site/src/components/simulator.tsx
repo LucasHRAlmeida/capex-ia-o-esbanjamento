@@ -71,7 +71,7 @@ export function Simulator() {
           />
           <Slider
             label="Fração do capex que é o mesmo produto, construído de novo"
-            hint="A corrida não melhora o retorno. O dólar já saiu, e o segundo data center não cria o segundo comprador."
+            hint="Hipótese autoral de duplicação competitiva. O controle não estima utilização, diferenciação nem valor residual."
             min={0}
             max={0.8}
             step={0.05}
@@ -82,25 +82,25 @@ export function Simulator() {
         </div>
 
         <dl className="grid grid-cols-2 gap-px bg-line lg:col-span-2 lg:grid-cols-1">
-          <Stat k="Retorno do que foi gasto" v={pct(result.roi)} accent />
+          <Stat k="Receita / capex acumulado" v={pct(result.cobertura)} accent />
           <Stat k="Receita reconhecível" v={`${bi(result.receita, 0)} bi`} />
-          <Stat k="Buraco que resta" v={`${bi(result.gap, 0)} bi`} />
+          <Stat k="Capex − receita" v={`${bi(result.gap, 0)} bi`} />
           <Stat
-            k="Capex sem segundo cliente"
+            k="Capex tratado como duplicado"
             v={`${bi(result.capexCorrida, 0)} bi`}
           />
           <Stat
-            k="Multiplicador para empatar"
+            k="Fator para igualdade bruta"
             v={Number.isFinite(needed) ? `${bi(needed, 1)}×` : "não há"}
           />
-          <Stat k="Empate acumulado" v={result.fecha ? "sim" : "não"} />
+          <Stat k="Receita ≥ capex" v={result.fecha ? "sim" : "não"} />
         </dl>
       </div>
 
       <p className="border-t border-line px-5 py-4 text-sm leading-relaxed text-muted">
         {authorOn
-          ? "Leitura do autor, ilustrativa: setenta por cento da receita futura é salário que o produto apaga, e metade do ferro é corrida pelo mesmo produto. O retorno cai de 19,8% para a casa de um dígito. A corrida entra como perda já realizada — não como desconto que embeleza a conta."
-          : "Arraste. O retorno usa sempre os 3.805 bi gastos. Substituir salário reduz a receita que pode pagá-los. Duplicar o ferro não reduz o denominador."}
+          ? "Leitura do autor, ilustrativa — não estimativa: setenta por cento da receita futura é tratado como salário substituído, e metade do ferro como corrida pelo mesmo produto. A razão receita/capex cai de 19,8% para a casa de um dígito."
+          : "Arraste. A razão mantém os 3.805 bi no denominador. Ela não é ROI nem fluxo de caixa: não inclui margem, despesas operacionais, impostos, valor residual ou custo de capital."}
       </p>
     </div>
   );
