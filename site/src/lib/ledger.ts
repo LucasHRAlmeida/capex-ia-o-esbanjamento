@@ -59,7 +59,7 @@ export function adjustRevenue(path: readonly number[], multiplier: number, alpha
   });
 }
 
-export function roiAcumulado(revenue: readonly number[]): number[] {
+export function coberturaAcumulada(revenue: readonly number[]): number[] {
   let spent = 0;
   let earned = 0;
   return revenue.map((value, index) => {
@@ -76,7 +76,7 @@ export function gapAnual(revenue: readonly number[]): number[] {
 export type LedgerOutcome = {
   receita: number;
   gap: number;
-  roi: number;
+  cobertura: number;
   fecha: boolean;
   capexCorrida: number;
 };
@@ -92,7 +92,7 @@ export function outcome(
   return {
     receita,
     gap: CAPEX_TOTAL - receita,
-    roi: (receita / CAPEX_TOTAL) * 100,
+    cobertura: (receita / CAPEX_TOTAL) * 100,
     fecha: receita >= CAPEX_TOTAL,
     capexCorrida: CAPEX_TOTAL * race,
   };
@@ -108,6 +108,10 @@ export function breakEvenMultiplier(scenario: Scenario, alpha: number): number {
   return (CAPEX_TOTAL - early) / (late * keep);
 }
 
-export const ROI_BASE = [10, 8.3, 7.4, 8.1, 9.9, 12.6, 15.9, 19.8];
-export const ROI_OTIMISTA = [10, 8.3, 7.4, 9.4, 14.6, 25.2, 42.2, 66];
-export const ROI_PESSIMISTA = [10, 8.3, 7.4, 7.2, 7.3, 7.6, 8.1, 8.5];
+/**
+ * Receita acumulada / capex acumulado. Não é ROI: não inclui margem, opex,
+ * impostos, valor residual dos ativos nem valor do dinheiro no tempo.
+ */
+export const COBERTURA_BASE = [10, 8.3, 7.4, 8.1, 9.9, 12.6, 15.9, 19.8];
+export const COBERTURA_OTIMISTA = [10, 8.3, 7.4, 9.4, 14.6, 25.2, 42.2, 66];
+export const COBERTURA_PESSIMISTA = [10, 8.3, 7.4, 7.2, 7.3, 7.6, 8.1, 8.5];
