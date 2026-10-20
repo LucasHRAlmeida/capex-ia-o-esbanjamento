@@ -35,18 +35,18 @@ export function sum(values: readonly number[]): number {
   return values.reduce((acc, value) => acc + value, 0);
 }
 
-export function bi(value: number, digits = 0): string {
+export function bi(value: number, digits = 0, locale = "pt-BR"): string {
   const sign = value < 0 ? "−" : "";
   const abs = Math.abs(value);
-  const body = abs.toLocaleString("pt-BR", {
+  const body = abs.toLocaleString(locale, {
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
   });
   return sign + body;
 }
 
-export function pct(value: number, digits = 1): string {
-  return `${bi(value, digits)}%`;
+export function pct(value: number, digits = 1, locale = "pt-BR"): string {
+  return `${bi(value, digits, locale)}%`;
 }
 
 export type Scenario = keyof typeof RECEITA;

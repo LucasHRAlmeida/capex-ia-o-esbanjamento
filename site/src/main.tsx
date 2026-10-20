@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { LangProvider } from "./i18n";
 import { Home } from "./page";
 import "./styles.css";
 
@@ -8,6 +9,8 @@ if (!root) throw new Error("root ausente");
 
 createRoot(root).render(
   <StrictMode>
-    <Home />
+    <LangProvider>
+      <Home />
+    </LangProvider>
   </StrictMode>,
 );

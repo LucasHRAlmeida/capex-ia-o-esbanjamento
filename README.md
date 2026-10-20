@@ -12,6 +12,10 @@ O código dessa página vive em [`site/`](site/) e o GitHub Actions publica no G
 
 O manifesto original, de página única, continua versionado em [`index.html`](index.html).
 
+### Idiomas (PT / EN / ES)
+
+A página tem um seletor de idioma no cabeçalho. Os textos ficam em [`site/src/i18n/`](site/src/i18n/): `pt.ts` é a fonte de verdade e `en.ts` / `es.ts` são tipados contra ela, então uma chave faltando quebra o typecheck e o teste (`npm test`). A escolha é guardada no navegador, e `?lang=en` ou `?lang=es` na URL abre direto naquele idioma (português é o padrão e não usa parâmetro). Números e percentuais seguem o separador de cada idioma.
+
 ## A tese, em uma frase
 
 > O povo não alienou o título. Quem administra o compute não ficou com o corpus. O capex que se anuncia para substituir quem teria de comprá-lo não se sustenta.
