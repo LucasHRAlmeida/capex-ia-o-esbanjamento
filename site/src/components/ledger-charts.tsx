@@ -9,6 +9,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useI18n } from "../i18n";
 import {
   CAPEX,
   DEPREC_MISTA,
@@ -46,6 +47,7 @@ function Tip({
   payload?: TipPayload[];
   label?: string | number;
 }) {
+  const { locale } = useI18n();
   if (!active || !payload?.length) return null;
   return (
     <div className="border border-line bg-ink px-3 py-2 text-sm">
@@ -53,7 +55,7 @@ function Tip({
       {payload.map((item) => (
         <div key={String(item.dataKey)} className="text-muted">
           <span style={{ color: item.color }}>{item.name}</span>{" "}
-          <span className="text-bone tabular-nums">{bi(Number(item.value), 1)}</span>
+          <span className="text-bone tabular-nums">{bi(Number(item.value), 1, locale)}</span>
         </div>
       ))}
     </div>
@@ -64,6 +66,7 @@ const axis = { fill: "var(--color-muted)", fontSize: 12 };
 const yAxis = { tick: axis, axisLine: false as const, tickLine: false as const, width: 46, tickMargin: 8 };
 
 export function CapexChart() {
+  const { t } = useI18n();
   const data = YEARS.map((year, index) => ({
     year,
     Capex: CAPEX[index],
@@ -81,10 +84,10 @@ export function CapexChart() {
             <XAxis dataKey="year" tick={axis} axisLine={false} tickLine={false} minTickGap={12} />
             <YAxis {...yAxis} />
             <Tooltip content={<Tip />} />
-            <Bar dataKey="Capex" fill={oxide} maxBarSize={26} />
-            <Line dataKey="Base" stroke={bone} strokeWidth={2} dot={false} />
-            <Line dataKey="Otimista" stroke={brass} strokeWidth={2} dot={false} />
-            <Line dataKey="Pessimista" stroke={muted} strokeWidth={2} strokeDasharray="4 4" dot={false} />
+            <Bar dataKey="Capex" name={t.charts.capex} fill={oxide} maxBarSize={26} />
+            <Line dataKey="Base" name={t.charts.base} stroke={bone} strokeWidth={2} dot={false} />
+            <Line dataKey="Otimista" name={t.charts.otimista} stroke={brass} strokeWidth={2} dot={false} />
+            <Line dataKey="Pessimista" name={t.charts.pessimista} stroke={muted} strokeWidth={2} strokeDasharray="4 4" dot={false} />
           </ComposedChart>
         </ResponsiveContainer>
       </div>
@@ -93,6 +96,7 @@ export function CapexChart() {
 }
 
 export function DeprecChart() {
+  const { t } = useI18n();
   const data = YEARS.map((year, index) => ({
     year,
     Publicada: DEPREC_PUBLICADA[index],
@@ -110,10 +114,10 @@ export function DeprecChart() {
             <XAxis dataKey="year" tick={axis} axisLine={false} tickLine={false} minTickGap={12} />
             <YAxis {...yAxis} domain={[0, 750]} />
             <Tooltip content={<Tip />} />
-            <Line dataKey="Publicada" stroke={brass} strokeWidth={2} dot={false} />
-            <Line dataKey="Vida de 3 anos" stroke={oxide} strokeWidth={2.4} dot={false} />
-            <Line dataKey="Mista" stroke={muted} strokeWidth={2} strokeDasharray="5 4" dot={false} />
-            <Line dataKey="Receita base" stroke={bone} strokeWidth={2} dot={false} />
+            <Line dataKey="Publicada" name={t.charts.publicada} stroke={brass} strokeWidth={2} dot={false} />
+            <Line dataKey="Vida de 3 anos" name={t.charts.vida3} stroke={oxide} strokeWidth={2.4} dot={false} />
+            <Line dataKey="Mista" name={t.charts.mista} stroke={muted} strokeWidth={2} strokeDasharray="5 4" dot={false} />
+            <Line dataKey="Receita base" name={t.charts.receitaBase} stroke={bone} strokeWidth={2} dot={false} />
           </ComposedChart>
         </ResponsiveContainer>
       </div>
@@ -122,6 +126,7 @@ export function DeprecChart() {
 }
 
 export function CoverageChart() {
+  const { t } = useI18n();
   const data = YEARS.map((year, index) => ({
     year,
     Base: COBERTURA_BASE[index],
@@ -139,10 +144,10 @@ export function CoverageChart() {
             <XAxis dataKey="year" tick={axis} axisLine={false} tickLine={false} minTickGap={12} />
             <YAxis {...yAxis} domain={[0, 110]} />
             <Tooltip content={<Tip />} />
-            <Line dataKey="Base" stroke={bone} strokeWidth={2.4} dot={false} />
-            <Line dataKey="Otimista" stroke={brass} strokeWidth={2} dot={false} />
-            <Line dataKey="Pessimista" stroke={muted} strokeWidth={2} strokeDasharray="4 4" dot={false} />
-            <Line dataKey="Empate" stroke={oxide} strokeDasharray="2 6" strokeWidth={1.5} dot={false} />
+            <Line dataKey="Base" name={t.charts.base} stroke={bone} strokeWidth={2.4} dot={false} />
+            <Line dataKey="Otimista" name={t.charts.otimista} stroke={brass} strokeWidth={2} dot={false} />
+            <Line dataKey="Pessimista" name={t.charts.pessimista} stroke={muted} strokeWidth={2} strokeDasharray="4 4" dot={false} />
+            <Line dataKey="Empate" name={t.charts.empate} stroke={oxide} strokeDasharray="2 6" strokeWidth={1.5} dot={false} />
           </ComposedChart>
         </ResponsiveContainer>
       </div>
