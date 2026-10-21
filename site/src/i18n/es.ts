@@ -13,6 +13,7 @@ export const es: Dict = {
     openSource: "Abrir fuente ↗",
     unit: "mil M",
     siteTitle: "El título y el capex",
+    backToHub: "← Volver al VIA Hub",
   },
   nav: {
     tese: "Tesis",
