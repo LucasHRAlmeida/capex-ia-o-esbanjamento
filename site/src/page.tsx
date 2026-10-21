@@ -50,6 +50,12 @@ export function Home() {
               {t.ui.siteTitle}
             </a>
             <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+              <a
+                href="https://iniciativa-via.com/via-hub/"
+                className="inline-flex min-h-11 items-center border border-line px-3 py-1.5 text-xs font-semibold text-bone hover:border-oxide hover:text-oxide focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxide"
+              >
+                {t.ui.backToHub}
+              </a>
               <nav className="flex gap-1" aria-label={t.ui.modulesAria}>
                 {MODULE_ITEMS.map(([href, key], index) => (
                   <a
