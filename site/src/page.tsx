@@ -58,7 +58,7 @@ export function Home() {
                     aria-current={index === 0 ? "page" : undefined}
                     className={`border px-2.5 py-1.5 text-xs whitespace-nowrap ${
                       index === 0
-                        ? "border-oxide bg-oxide text-bone"
+                        ? "border-signal bg-signal text-ink"
                         : "border-line text-muted hover:border-bone hover:text-bone"
                     }`}
                   >
