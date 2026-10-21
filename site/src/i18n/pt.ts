@@ -12,6 +12,7 @@ export const pt = {
     openSource: "Abrir fonte ↗",
     unit: "bi",
     siteTitle: "O título e o capex",
+    backToHub: "← Voltar ao VIA Hub",
   },
   nav: {
     tese: "Tese",
