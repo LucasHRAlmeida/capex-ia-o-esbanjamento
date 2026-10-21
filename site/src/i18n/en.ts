@@ -90,7 +90,7 @@ export const en: Dict = {
     title: "The manifesto's scenario, as published",
     intro:
       "Authorial series from the repository, in billions of dollars. It combines historical and future years without marking the boundary or citing the origin of each observation. It serves to test a thesis under three revenue trajectories; it should not be read as market consensus. In the scenario called “optimistic”, cumulative revenue equals 66% of cumulative capex.",
-    chartNote: "Bars: capex. Light line: base revenue. Brass: optimistic. Dashed: pessimistic.",
+    chartNote: "Bars: capex. Light line: base revenue. Green: optimistic. Dashed: pessimistic.",
     headers: [
       "Year",
       "Capex",
@@ -180,7 +180,7 @@ export const en: Dict = {
   esteira: {
     title: "Depreciation: three models, no hidden certainty",
     chartNote:
-      "Brass: published heuristic. Oxide: three years, straight line. Dashed: proposed mix. Light: base revenue.",
+      "Green: published heuristic. Teal: three years, straight line. Dashed: proposed mix. Light: base revenue.",
     text: "In 2030 base revenue is 260. The depreciation the manifesto prints is 400. The one printed by the extreme three-year hypothesis on all capex is 677. This tests accounting sensitivity; it does not prove negative cash. Revenue, depreciation and capex are of different natures and would only be comparable in consistent financial statements.",
     bars: {
       receita: "Base revenue, 2030",
@@ -190,7 +190,7 @@ export const en: Dict = {
       capex: "Capex of the year",
     },
     coverageNote:
-      "Cumulative revenue / cumulative capex. The oxide line marks arithmetic parity, 100% — not economic break-even. The optimistic scenario reaches 66% in 2030.",
+      "Cumulative revenue / cumulative capex. The teal line marks arithmetic parity, 100% — not economic break-even. The optimistic scenario reaches 66% in 2030.",
   },
   simulador: {
     title: "The scenario, in controls",
