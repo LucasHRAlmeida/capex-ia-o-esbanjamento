@@ -42,7 +42,7 @@ export function Simulator() {
               setAlpha(AUTHOR.alpha);
               setRace(AUTHOR.race);
             }}
-            className={`min-h-11 border px-4 text-sm ${authorOn ? "border-oxide bg-oxide text-bone" : "border-oxide text-oxide hover:bg-oxide hover:text-bone"}`}
+            className={`min-h-11 border px-4 text-sm ${authorOn ? "border-oxide bg-oxide text-ink" : "border-oxide text-oxide hover:bg-oxide hover:text-ink"}`}
           >
             {t.sim.autor}
           </button>
