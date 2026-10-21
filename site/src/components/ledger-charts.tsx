@@ -23,7 +23,7 @@ import {
   bi,
 } from "../lib/ledger";
 
-const oxide = "var(--color-oxide)";
+const oxide = "var(--color-signal)";
 const bone = "var(--color-bone)";
 const brass = "var(--color-brass)";
 const muted = "var(--color-muted)";

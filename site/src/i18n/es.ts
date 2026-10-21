@@ -91,7 +91,7 @@ export const es: Dict = {
     title: "El escenario del manifiesto, tal como se publicó",
     intro:
       "Serie del autor en el repositorio, en miles de millones de dólares. Combina años históricos y futuros sin marcar la frontera ni citar el origen de cada observación. Sirve para probar una tesis bajo tres trayectorias de ingresos; no debe leerse como consenso de mercado. En el escenario llamado “optimista”, el ingreso acumulado equivale al 66% del capex acumulado.",
-    chartNote: "Barras: capex. Línea clara: ingresos base. Latón: optimista. Discontinua: pesimista.",
+    chartNote: "Barras: capex. Línea clara: ingresos base. Verde: optimista. Discontinua: pesimista.",
     headers: [
       "Año",
       "Capex",
@@ -181,7 +181,7 @@ export const es: Dict = {
   esteira: {
     title: "Depreciación: tres modelos, ninguna certeza escondida",
     chartNote:
-      "Latón: heurística publicada. Óxido: tres años, línea recta. Discontinua: mezcla propuesta. Clara: ingresos base.",
+      "Verde: heurística publicada. Teal: tres años, línea recta. Discontinua: mezcla propuesta. Clara: ingresos base.",
     text: "En 2030 los ingresos base son 260. La depreciación que imprime el manifiesto es 400. La que imprime la hipótesis extrema de tres años sobre todo el capex es 677. Esto prueba sensibilidad contable; no demuestra caja negativa. Ingresos, depreciación y capex tienen naturalezas distintas y solo serían comparables en estados financieros consistentes.",
     bars: {
       receita: "Ingresos base, 2030",
@@ -191,7 +191,7 @@ export const es: Dict = {
       capex: "Capex del año",
     },
     coverageNote:
-      "Ingreso acumulado / capex acumulado. La línea de óxido marca igualdad aritmética, 100% — no punto de equilibrio económico. El escenario optimista llega a 66% en 2030.",
+      "Ingreso acumulado / capex acumulado. La línea teal marca igualdad aritmética, 100% — no punto de equilibrio económico. El escenario optimista llega a 66% en 2030.",
   },
   simulador: {
     title: "El escenario, en controles",

@@ -90,7 +90,7 @@ export const pt = {
     title: "O cenário do manifesto, como publicado",
     intro:
       "Série autoral do repositório, em bilhões de dólares. Ela combina anos históricos e futuros sem marcar a fronteira nem citar a origem de cada observação. Serve para testar uma tese sob três trajetórias de receita; não deve ser lida como consenso de mercado. No cenário chamado “otimista”, a receita acumulada equivale a 66% do capex acumulado.",
-    chartNote: "Barras: capex. Linha clara: receita base. Latão: otimista. Tracejado: pessimista.",
+    chartNote: "Barras: capex. Linha clara: receita base. Verde: otimista. Tracejado: pessimista.",
     headers: [
       "Ano",
       "Capex",
@@ -180,7 +180,7 @@ export const pt = {
   esteira: {
     title: "Depreciação: três modelos, nenhuma certeza escondida",
     chartNote:
-      "Latão: heurística publicada. Óxido: três anos, linha reta. Tracejado: mistura proposta. Clara: receita base.",
+      "Verde: heurística publicada. Teal: três anos, linha reta. Tracejado: mistura proposta. Clara: receita base.",
     text: "Em 2030 a receita base é 260. A depreciação que o manifesto imprime é 400. A que a hipótese extrema de três anos sobre todo o capex imprime é 677. Isso testa sensibilidade contábil; não prova caixa negativo. Receita, depreciação e capex têm naturezas diferentes e só seriam comparáveis em demonstrações consistentes.",
     bars: {
       receita: "Receita base, 2030",
@@ -190,7 +190,7 @@ export const pt = {
       capex: "Capex do ano",
     },
     coverageNote:
-      "Receita acumulada / capex acumulado. A linha de óxido marca igualdade aritmética, 100% — não break-even econômico. O cenário otimista chega a 66% em 2030.",
+      "Receita acumulada / capex acumulado. A linha teal marca igualdade aritmética, 100% — não break-even econômico. O cenário otimista chega a 66% em 2030.",
   },
   simulador: {
     title: "O cenário, em controles",
