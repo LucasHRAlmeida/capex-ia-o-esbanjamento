@@ -22,6 +22,7 @@ export const en: Dict = {
     esteira: "Depreciation",
     simulador: "Simulator",
     estatuto: "Status",
+    pergunte: "Ask",
   },
   modules: {
     economia: "Economics",
@@ -288,5 +289,150 @@ export const en: Dict = {
     role: "Physician · VIA Initiative · Human-gate · Lavras, Minas Gerais",
     notes:
       "Origin manifesto: repository capex-ia-o-esbanjamento, September 24, 2026. Economic audit: October 1, 2026. Informational sovereignty at iniciativa-via.com.",
+  },
+  bot: {
+    open: "Ask the page",
+    close: "Close the reader",
+    title: "Page reader",
+    subtitle: "A FAQ with status: it answers what is written — and flags what is still a gap.",
+    placeholder: "Ask about the accounts, the thesis, or what is not proven…",
+    send: "Send",
+    greeting:
+      "I am not an oracle. I read this page: the accounts, the thesis, the method, and the status of each claim. Ask as you would a reviewer, not a salesperson.",
+    fallback:
+      "That lies outside this page’s perimeter. I can talk about the accounts, the title thesis, depreciation, the simulator, or what is still unproven.",
+    clarify: "There are two possible readings. Which one do you want?",
+    also: "Also relevant",
+    seeSection: "Go to section",
+    continue: "Continue",
+    you: "You",
+    page: "Page",
+    teaserKicker: "Embedded reader",
+    teaserTitle: "Ask the page — with status, not with faith.",
+    teaserBody:
+      "A FAQ that remembers the last turn, recognizes the numbers, and refuses what this analysis does not prove.",
+    or: "or",
+    who: "I am this page’s embedded reader — a FAQ with memory and status, not a model that invents. Without this analysis as corpus, there is nothing to answer.",
+    thanks: "You are welcome. If the next doubt is about the accounts, the thesis, or a gap, continue.",
+    suggestions: [
+      "Is 19.8% ROI?",
+      "Why doesn’t 2.7× close the books?",
+      "Does the capex hold up?",
+      "What is the title?",
+      "What does this page not prove?",
+    ],
+    epistemic: {
+      verified: "Verified",
+      inferred: "Inferred",
+      proposed: "Proposed",
+      gap: "Gap",
+    },
+    cards: {
+      titulo: {
+        title: "The title",
+        body: "The people did not alienate the title. Public language, the archive and mediation were not transferred to whoever holds compute. Whoever did not alienate the title did not lose it because someone else administers it. This is a normative thesis — not a criminal verdict.",
+        followUps: ["Without corpora, are there weights?", "What does this page not prove?"],
+      },
+      corpus: {
+        title: "Corpus and weights",
+        body: "Without corpora there are no weights. The knowledge from which weights are extracted is civilizational accumulation; the algorithm, without a corpus, does not found original property. Capex is the container; the archive is the content.",
+        followUps: ["What is the title?", "Does the capex hold up?"],
+      },
+      serie: {
+        title: "The manifesto series",
+        body: "The series is authorial: 3,805 bn of capex and 755 bn of base revenue, 2023–2030. The arithmetic checks out; the perimeter and the line-by-line origin remain a hypothesis. It is not a market consensus.",
+        followUps: ["Is 19.8% ROI?", "What does this page not prove?"],
+      },
+      cobertura: {
+        title: "19.8% is not ROI",
+        body: "755 / 3,805 = 19.8%. That is cumulative revenue over cumulative capex — a gross coverage ratio. ROI would require profit or cash flow, time, residual value and the cost of capital. The page does not call this ROI.",
+        followUps: ["Is capex minus revenue a loss?", "Why doesn’t 2.7× close the books?"],
+      },
+      identidade: {
+        title: "An identity, not a loss",
+        body: "“Capex − revenue” is neither a loss nor a cash deficit. It compares an investment that creates assets with gross revenue, without margin, opex, tax or cost of capital. The column is a scenario identity, not a financial statement.",
+        followUps: ["Is 19.8% ROI?", "Does depreciation prove negative cash?"],
+      },
+      gap: {
+        title: "The 3,050 gap",
+        body: "The cumulative base-case difference is 3,050 bn. It is the series minus the series, in the same file. Without the same perimeter on capex and incremental revenue of the same agents, the gap does not prove unsustainability.",
+        followUps: ["Does the capex hold up?", "Why doesn’t 2.7× close the books?"],
+      },
+      multiplicadores: {
+        title: "2.69× is not 5×",
+        body: "700 / 260 = 2.69 — that equalizes 2030 alone. To match the cumulative totals: 5.04× in every year; 5.33× if only 2026 onward varies; 12.7× if only 2030 varies. None of those identities is economic break-even.",
+        followUps: ["What are the 17.9 bn subscribers?", "Is 19.8% ROI?"],
+      },
+      netflix: {
+        title: "17.9 bn is not a subscriber base",
+        body: "17.9 bn comes from 3,050 / about US$170 per subscription-year. It translates an eight-year difference into a single hypothetical year of billing, without cost, churn or ability to pay. It does not measure an addressable market.",
+        followUps: ["Why doesn’t 2.7× close the books?", "Does the capex hold up?"],
+      },
+      depreciacao: {
+        title: "Three years is a stress test",
+        body: "The published rule — 35% of the prior year plus 25% from two years back — is not three-year straight-line depreciation. Applying three years to all capex is a sensitivity. Meta reports 5.5 years for most servers and networking. The uncertainty is material.",
+        followUps: ["What does the 2030 stack show?", "Is capex minus revenue a loss?"],
+      },
+      esteira: {
+        title: "Revenue, depreciation and capex are different objects",
+        body: "In 2030: revenue 260, published depreciation 400.5, mixed 482, three-year 677, capex 700. Different natures. Comparing them tests the arithmetic; it does not prove negative operating cash.",
+        followUps: ["Is the 3-year depreciation demonstrated?", "Is 19.8% ROI?"],
+      },
+      divida: {
+        title: "Hyperscaler debt, not global debt",
+        body: "Goldman estimates 27% of hyperscaler capex financed by debt in 2025 and projects 33% in 2026. That does not show that one third of all global capex is already leveraged. The fraction changes by year and perimeter.",
+        followUps: ["Does the capex hold up?", "Which sources does the page cite?"],
+      },
+      mesmoProduto: {
+        title: "The same product, built again",
+        body: "Author’s hypothesis: vendors compress overlapping corpora and may duplicate capacity through competition. The series does not measure overlap, utilization or customers. In the simulator this is a control, not an estimate.",
+        followUps: ["What is the demand that erases itself?", "How does the simulator work?"],
+      },
+      demanda: {
+        title: "Demand the product may erase",
+        body: "Hypothesis: if automation cuts labor income faster than it creates new demand, part of the paying base contracts. The net effect depends on prices, distribution and the responses of firms, households and the state.",
+        followUps: ["Is the same product measured?", "How does the simulator work?"],
+      },
+      escolas: {
+        title: "Five lenses, no extra validation",
+        body: "Austrian, Keynesian, monetarist, institutionalist and financial readings interpret the manifesto. They are not five independent proofs. The financial reading requires flows, margins and a cost of capital that the series does not contain.",
+        followUps: ["What is the sixth reading?", "Does the capex hold up?"],
+      },
+      etica: {
+        title: "Mathematics disciplines; it does not replace",
+        body: "The sixth reading is the ethics of entitlement. The argument of corpus and power is the author’s normative position. The economic outcome depends on adoption, prices, productivity, competition and public policy. The page assigns no probability where there is no model.",
+        followUps: ["What is the title?", "What does this page not prove?"],
+      },
+      estatuto: {
+        title: "The status of this page",
+        body: "Verified: the accounts match. Inferred: risk of excess capacity and a dispute over title. Proposed: simulator controls and the 60/40 mix. Gap: line-by-line source, a common perimeter, margins, opex, residual value and cost of capital.",
+        followUps: ["Does the capex hold up?", "Which sources does the page cite?"],
+      },
+      metodo: {
+        title: "Method and provenance",
+        body: "“Checks out” means a reproducible operation. “Source” names provenance. “Benchmark” only bounds plausibility. Goldman, McKinsey, Meta’s 10-K and Bloomberg Intelligence do not validate the VIA series; they show that value and perimeter depend on the model.",
+        followUps: ["Does the capex hold up?", "What does this page not prove?"],
+      },
+      perimetro: {
+        title: "Holding up is a conditional conclusion",
+        body: "There is no auditable bridge between global capex, incremental AI revenue and the cash flow of the same agents. Without that perimeter, “sustainable” or “unsustainable” remains a conditional conclusion — not a mathematical proof. The series shows a gap; it does not close the verdict.",
+        followUps: ["Is 19.8% ROI?", "What does this page not prove?"],
+      },
+      simulador: {
+        title: "The simulator shows consequence, not probability",
+        body: "Three controls: revenue from 2026, the fraction that is only replaced wages, and the fraction of capex treated as the same product. The author’s reading — 70% and 50% — is illustrative. Dragging does not estimate the world; it tests the identity.",
+        followUps: ["What is the demand that erases itself?", "Why doesn’t 2.7× close the books?"],
+      },
+      otimista: {
+        title: "The optimistic case reaches 66% — and still does not tie",
+        body: "In the optimistic scenario cumulative revenue is 2,510 bn against 3,805 of capex: 66%. The 100% line on the chart is arithmetic equality, not economic break-even. Even the high path stays below a gross tie.",
+        followUps: ["Is 19.8% ROI?", "Does the capex hold up?"],
+      },
+      autor: {
+        title: "Who signs",
+        body: "Dr. Lucas HR Almeida, physician, VIA Initiative, Lavras. Manifesto on September 24, 2026; audit on October 1. Human-gate: the page keeps the thesis without converting human expectation into numerical certainty.",
+        followUps: ["What is the title?", "What does this page not prove?"],
+      },
+    },
   },
 };
