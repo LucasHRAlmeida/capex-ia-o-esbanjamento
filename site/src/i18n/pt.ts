@@ -21,6 +21,7 @@ export const pt = {
     esteira: "Esteira",
     simulador: "Simulador",
     estatuto: "Estatuto",
+    pergunte: "Pergunte",
   },
   modules: {
     economia: "Economia",
@@ -287,6 +288,151 @@ export const pt = {
     role: "Médico · Iniciativa VIA · Human-gate · Lavras, Minas Gerais",
     notes:
       "Manifesto de origem: repositório capex-ia-o-esbanjamento, 24 de setembro de 2026. Auditoria econômica: 1º de outubro de 2026. Soberania informacional em iniciativa-via.com.",
+  },
+  bot: {
+    open: "Perguntar à página",
+    close: "Fechar o leitor",
+    title: "Leitor da página",
+    subtitle: "FAQ com estatuto: responde o que está escrito — e marca o que ainda é lacuna.",
+    placeholder: "Pergunte sobre as contas, a tese ou o que não está provado…",
+    send: "Enviar",
+    greeting:
+      "Não sou oráculo. Leio esta página: contas, tese, método e o estatuto de cada afirmação. Pergunte como a um revisor, não como a um vendedor.",
+    fallback:
+      "Isso foge do perímetro desta página. Posso falar das contas, da tese de titularidade, da depreciação, do simulador ou do que ainda não está provado.",
+    clarify: "Há duas leituras possíveis. Qual delas você quer?",
+    also: "Também importa",
+    seeSection: "Ir à seção",
+    continue: "Continuar",
+    you: "Você",
+    page: "Página",
+    teaserKicker: "Leitor embarcado",
+    teaserTitle: "Pergunte à página — com estatuto, não com fé.",
+    teaserBody:
+      "Um FAQ que lembra o turno anterior, reconhece os números e recusa o que esta análise não prova.",
+    or: "ou",
+    who: "Sou o leitor embarcado desta página — um FAQ com memória e estatuto, não um modelo que inventa. Sem o corpus desta análise, não há o que responder.",
+    thanks: "De nada. Se a dúvida seguinte for de conta, tese ou lacuna, continue.",
+    suggestions: [
+      "O 19,8% é ROI?",
+      "Por que 2,7× não fecha a conta?",
+      "O capex se sustenta?",
+      "O que é o título?",
+      "O que esta página não prova?",
+    ],
+    epistemic: {
+      verified: "Verificado",
+      inferred: "Inferido",
+      proposed: "Proposto",
+      gap: "Lacuna",
+    },
+    cards: {
+      titulo: {
+        title: "O título",
+        body: "O povo não alienou o título. Língua pública, arquivo e mediação não passaram a quem detém compute. Quem não alienou o título não o perdeu pelo fato de outro o administrar. Isso é tese normativa — não sentença penal.",
+        followUps: ["Sem corpora existem pesos?", "O que esta página não prova?"],
+      },
+      corpus: {
+        title: "Corpus e pesos",
+        body: "Sem corpora não existem pesos. O conhecimento de que os pesos se extraem é acúmulo civilizatório; o algoritmo, sem corpus, não funda propriedade originária. O capex é recipiente; o conteúdo é o arquivo.",
+        followUps: ["O que é o título?", "O capex se sustenta?"],
+      },
+      serie: {
+        title: "A série do manifesto",
+        body: "A série é autoral: 3.805 bi de capex e 755 bi de receita base, 2023–2030. A aritmética confere; o perímetro e a origem linha a linha permanecem hipótese. Não é consenso de mercado.",
+        followUps: ["O 19,8% é ROI?", "O que esta página não prova?"],
+      },
+      cobertura: {
+        title: "19,8% não é ROI",
+        body: "755 / 3.805 = 19,8%. É receita acumulada sobre capex acumulado — cobertura bruta. ROI pediria lucro ou fluxo, tempo, residual e custo de capital. A página não chama isso de ROI.",
+        followUps: ["Capex menos receita é prejuízo?", "Por que 2,7× não fecha a conta?"],
+      },
+      identidade: {
+        title: "Identidade, não prejuízo",
+        body: "“Capex − receita” não é prejuízo nem déficit de caixa. Compara investimento que gera ativo com receita bruta, sem margem, opex, imposto ou custo de capital. A coluna é identidade do cenário, não demonstração financeira.",
+        followUps: ["O 19,8% é ROI?", "A depreciação prova caixa negativo?"],
+      },
+      gap: {
+        title: "O gap de 3.050",
+        body: "A diferença acumulada no base é 3.050 bi. É a série menos a série, no mesmo arquivo. Sem o mesmo perímetro em capex e receita incremental dos mesmos agentes, o gap não prova insustentabilidade.",
+        followUps: ["O capex se sustenta?", "Por que 2,7× não fecha a conta?"],
+      },
+      multiplicadores: {
+        title: "2,69× não é 5×",
+        body: "700 / 260 = 2,69 — iguala só o ano de 2030. Para empatar o acumulado: 5,04× em todos os anos; 5,33× se só 2026 em diante variar; 12,7× se só 2030 variar. Nenhuma dessas identidades é break-even econômico.",
+        followUps: ["O que são os 17,9 bi de assinantes?", "O 19,8% é ROI?"],
+      },
+      netflix: {
+        title: "17,9 bi não é base de assinantes",
+        body: "17,9 bi sai de 3.050 / cerca de US$ 170 por assinatura-ano. Traduz oito anos de diferença num único ano hipotético de faturamento, sem custo, churn ou capacidade de pagamento. Não mede mercado endereçável.",
+        followUps: ["Por que 2,7× não fecha a conta?", "O capex se sustenta?"],
+      },
+      depreciacao: {
+        title: "Três anos é teste de estresse",
+        body: "A regra publicada — 35% do ano anterior mais 25% de dois anos atrás — não é depreciação linear de três anos. Aplicar três anos a todo o capex é sensibilidade. Meta reporta 5,5 anos para a maior parte de servidores e rede. A incerteza é material.",
+        followUps: ["O que a esteira mostra em 2030?", "Capex menos receita é prejuízo?"],
+      },
+      esteira: {
+        title: "Receita, depreciação e capex não são o mesmo objeto",
+        body: "Em 2030: receita 260, depreciação publicada 400,5, mista 482, três anos 677, capex 700. Naturezas diferentes. Compará-las testa a conta; não prova caixa operacional negativo.",
+        followUps: ["A depreciação de 3 anos está demonstrada?", "O 19,8% é ROI?"],
+      },
+      divida: {
+        title: "Dívida dos hyperscalers, não do globo",
+        body: "Goldman estima 27% do capex dos hyperscalers financiado por dívida em 2025 e projeta 33% em 2026. Isso não demonstra que um terço de todo o capex global já esteja endividado. A fração muda por ano e perímetro.",
+        followUps: ["O capex se sustenta?", "Quais fontes a página cita?"],
+      },
+      mesmoProduto: {
+        title: "O mesmo produto, de novo",
+        body: "Hipótese do autor: vendors comprimem corpora sobrepostos e podem duplicar capacidade por competição. A série não mede sobreposição, utilização nem clientes. No simulador isso é um controle, não uma estimativa.",
+        followUps: ["O que é a demanda que se apaga?", "Como funciona o simulador?"],
+      },
+      demanda: {
+        title: "A demanda que o produto pode apagar",
+        body: "Hipótese: se a automação cortar renda do trabalho mais depressa do que cria demanda nova, parte da base pagadora se contrai. O efeito líquido depende de preços, distribuição e respostas de firmas, famílias e Estado.",
+        followUps: ["O mesmo produto está medido?", "Como funciona o simulador?"],
+      },
+      escolas: {
+        title: "Cinco lentes, nenhuma validação extra",
+        body: "Austríaca, keynesiana, monetarista, institucionalista e financeira interpretam o manifesto. Não são cinco provas independentes. A leitura financeira exige fluxos, margens e custo de capital que a série não contém.",
+        followUps: ["O que é a sexta leitura?", "O capex se sustenta?"],
+      },
+      etica: {
+        title: "A matemática disciplina; não substitui",
+        body: "A sexta leitura é ética da titularidade. O argumento de corpus e poder é posição normativa do autor. O resultado econômico depende de adoção, preços, produtividade, competição e política pública. A página não atribui probabilidade onde não há modelo.",
+        followUps: ["O que é o título?", "O que esta página não prova?"],
+      },
+      estatuto: {
+        title: "O estatuto desta página",
+        body: "Verificado: as contas batem. Inferido: risco de excesso e disputa de título. Proposto: controles do simulador e a mistura 60/40. Lacuna: fonte linha a linha, perímetro comum, margens, opex, residual e custo de capital.",
+        followUps: ["O capex se sustenta?", "Quais fontes a página cita?"],
+      },
+      metodo: {
+        title: "Método e procedência",
+        body: "“Confere” quer dizer operação reproduzível. “Fonte” identifica procedência. “Benchmark” só delimita plausibilidade. Goldman, McKinsey, Meta 10-K e Bloomberg Intelligence não validam a série VIA; mostram que valor e perímetro dependem do modelo.",
+        followUps: ["O capex se sustenta?", "O que esta página não prova?"],
+      },
+      perimetro: {
+        title: "Sustentar-se é conclusão condicional",
+        body: "Não há ponte auditável entre capex global, receita incremental atribuível à IA e fluxo dos mesmos agentes. Sem esse perímetro, “sustentável” ou “insustentável” permanece conclusão condicional — não prova matemática. A série mostra um gap; não fecha o veredito.",
+        followUps: ["O 19,8% é ROI?", "O que esta página não prova?"],
+      },
+      simulador: {
+        title: "O simulador mostra consequência, não probabilidade",
+        body: "Três controles: receita a partir de 2026, fração que é só salário substituído, fração do capex como o mesmo produto. A leitura do autor — 70% e 50% — é ilustrativa. Arrastar não estima o mundo; testa a identidade.",
+        followUps: ["O que é a demanda que se apaga?", "Por que 2,7× não fecha a conta?"],
+      },
+      otimista: {
+        title: "O otimista chega a 66% — e ainda não empata",
+        body: "No cenário otimista a receita acumulada é 2.510 bi contra 3.805 de capex: 66%. A linha de 100% no gráfico é igualdade aritmética, não break-even econômico. Mesmo a trajetória alta permanece abaixo do empate bruto.",
+        followUps: ["O 19,8% é ROI?", "O capex se sustenta?"],
+      },
+      autor: {
+        title: "Quem assina",
+        body: "Dr. Lucas HR Almeida, médico, Iniciativa VIA, Lavras. Manifesto em 24 de setembro de 2026; auditoria em 1º de outubro. Human-gate: a página conserva a tese sem converter expectativa humana em certeza numérica.",
+        followUps: ["O que é o título?", "O que esta página não prova?"],
+      },
+    },
   },
 };
 

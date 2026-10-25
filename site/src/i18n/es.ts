@@ -22,6 +22,7 @@ export const es: Dict = {
     esteira: "Depreciación",
     simulador: "Simulador",
     estatuto: "Estatuto",
+    pergunte: "Pregunte",
   },
   modules: {
     economia: "Economía",
@@ -288,5 +289,150 @@ export const es: Dict = {
     role: "Médico · Iniciativa VIA · Human-gate · Lavras, Minas Gerais",
     notes:
       "Manifiesto de origen: repositorio capex-ia-o-esbanjamento, 24 de septiembre de 2026. Auditoría económica: 1 de octubre de 2026. Soberanía informacional en iniciativa-via.com.",
+  },
+  bot: {
+    open: "Preguntar a la página",
+    close: "Cerrar el lector",
+    title: "Lector de la página",
+    subtitle: "FAQ con estatuto: responde lo escrito — y marca lo que sigue siendo laguna.",
+    placeholder: "Pregunte por las cuentas, la tesis o lo que no está demostrado…",
+    send: "Enviar",
+    greeting:
+      "No soy oráculo. Leo esta página: cuentas, tesis, método y el estatuto de cada afirmación. Pregunte como a un revisor, no como a un vendedor.",
+    fallback:
+      "Eso queda fuera del perímetro de esta página. Puedo hablar de las cuentas, de la tesis de titularidad, de la depreciación, del simulador o de lo que aún no está demostrado.",
+    clarify: "Hay dos lecturas posibles. ¿Cuál quiere?",
+    also: "También importa",
+    seeSection: "Ir a la sección",
+    continue: "Seguir",
+    you: "Usted",
+    page: "Página",
+    teaserKicker: "Lector embarcado",
+    teaserTitle: "Pregunte a la página — con estatuto, no con fe.",
+    teaserBody:
+      "Un FAQ que recuerda el turno anterior, reconoce los números y rechaza lo que este análisis no demuestra.",
+    or: "o",
+    who: "Soy el lector embarcado de esta página — un FAQ con memoria y estatuto, no un modelo que inventa. Sin el corpus de este análisis, no hay qué responder.",
+    thanks: "De nada. Si la siguiente duda es de cuenta, tesis o laguna, siga.",
+    suggestions: [
+      "¿El 19,8% es ROI?",
+      "¿Por qué 2,7× no cierra la cuenta?",
+      "¿El capex se sostiene?",
+      "¿Qué es el título?",
+      "¿Qué no demuestra esta página?",
+    ],
+    epistemic: {
+      verified: "Verificado",
+      inferred: "Inferido",
+      proposed: "Propuesto",
+      gap: "Laguna",
+    },
+    cards: {
+      titulo: {
+        title: "El título",
+        body: "El pueblo no enajenó el título. Lengua pública, archivo y mediación no pasaron a quien detenta compute. Quien no enajenó el título no lo perdió porque otro lo administre. Es tesis normativa — no sentencia penal.",
+        followUps: ["¿Sin corpora hay pesos?", "¿Qué no demuestra esta página?"],
+      },
+      corpus: {
+        title: "Corpus y pesos",
+        body: "Sin corpora no hay pesos. El conocimiento del que se extraen los pesos es acumulación civilizatoria; el algoritmo, sin corpus, no funda propiedad originaria. El capex es recipiente; el archivo es el contenido.",
+        followUps: ["¿Qué es el título?", "¿El capex se sostiene?"],
+      },
+      serie: {
+        title: "La serie del manifiesto",
+        body: "La serie es del autor: 3805 mil M de capex y 755 mil M de ingresos base, 2023–2030. La aritmética cuadra; el perímetro y el origen fila por fila siguen siendo hipótesis. No es consenso de mercado.",
+        followUps: ["¿El 19,8% es ROI?", "¿Qué no demuestra esta página?"],
+      },
+      cobertura: {
+        title: "El 19,8% no es ROI",
+        body: "755 / 3805 = 19,8%. Es ingreso acumulado sobre capex acumulado — cobertura bruta. El ROI pediría lucro o flujo, tiempo, residual y costo de capital. La página no llama ROI a eso.",
+        followUps: ["¿Capex menos ingresos es pérdida?", "¿Por qué 2,7× no cierra la cuenta?"],
+      },
+      identidade: {
+        title: "Identidad, no pérdida",
+        body: "“Capex − ingresos” no es pérdida ni déficit de caja. Compara una inversión que genera activos con ingreso bruto, sin margen, opex, impuesto ni costo de capital. La columna es identidad del escenario, no estado financiero.",
+        followUps: ["¿El 19,8% es ROI?", "¿La depreciación prueba caja negativa?"],
+      },
+      gap: {
+        title: "El gap de 3050",
+        body: "La diferencia acumulada en el caso base es 3050 mil M. Es la serie menos la serie, en el mismo archivo. Sin el mismo perímetro en capex e ingresos incrementales de los mismos agentes, el gap no prueba insostenibilidad.",
+        followUps: ["¿El capex se sostiene?", "¿Por qué 2,7× no cierra la cuenta?"],
+      },
+      multiplicadores: {
+        title: "2,69× no es 5×",
+        body: "700 / 260 = 2,69 — iguala solo el año 2030. Para empatar lo acumulado: 5,04× en todos los años; 5,33× si solo varía desde 2026; 12,7× si solo varía 2030. Ninguna de esas identidades es break-even económico.",
+        followUps: ["¿Qué son los 17,9 mil M de suscriptores?", "¿El 19,8% es ROI?"],
+      },
+      netflix: {
+        title: "17,9 mil M no es una base de suscriptores",
+        body: "17,9 mil M sale de 3050 / unos US$ 170 por suscripción-año. Traduce ocho años de diferencia en un solo año hipotético de facturación, sin costo, churn ni capacidad de pago. No mide mercado direccionable.",
+        followUps: ["¿Por qué 2,7× no cierra la cuenta?", "¿El capex se sostiene?"],
+      },
+      depreciacao: {
+        title: "Tres años es una prueba de estrés",
+        body: "La regla publicada — 35% del año anterior más 25% de hace dos años — no es depreciación lineal de tres años. Aplicar tres años a todo el capex es sensibilidad. Meta informa 5,5 años para la mayor parte de servidores y red. La incertidumbre es material.",
+        followUps: ["¿Qué muestra la cinta en 2030?", "¿Capex menos ingresos es pérdida?"],
+      },
+      esteira: {
+        title: "Ingresos, depreciación y capex no son el mismo objeto",
+        body: "En 2030: ingresos 260, depreciación publicada 400,5, mixta 482, tres años 677, capex 700. Naturalezas distintas. Compararlas pone a prueba la cuenta; no prueba caja operativa negativa.",
+        followUps: ["¿Está demostrada la depreciación a 3 años?", "¿El 19,8% es ROI?"],
+      },
+      divida: {
+        title: "Deuda de hyperscalers, no del globo",
+        body: "Goldman estima que el 27% del capex de los hyperscalers se financió con deuda en 2025 y proyecta el 33% en 2026. Eso no demuestra que un tercio de todo el capex global ya esté endeudado. La fracción cambia por año y perímetro.",
+        followUps: ["¿El capex se sostiene?", "¿Qué fuentes cita la página?"],
+      },
+      mesmoProduto: {
+        title: "El mismo producto, otra vez",
+        body: "Hipótesis del autor: los vendors comprimen corpora superpuestos y pueden duplicar capacidad por competencia. La serie no mide superposición, utilización ni clientes. En el simulador eso es un control, no una estimación.",
+        followUps: ["¿Qué es la demanda que se borra?", "¿Cómo funciona el simulador?"],
+      },
+      demanda: {
+        title: "La demanda que el producto puede borrar",
+        body: "Hipótesis: si la automatización recorta la renta del trabajo más rápido de lo que crea demanda nueva, parte de la base pagadora se contrae. El efecto neto depende de precios, distribución y respuestas de empresas, familias y Estado.",
+        followUps: ["¿El mismo producto está medido?", "¿Cómo funciona el simulador?"],
+      },
+      escolas: {
+        title: "Cinco lentes, ninguna validación extra",
+        body: "La austriaca, la keynesiana, la monetarista, la institucionalista y la financiera interpretan el manifiesto. No son cinco pruebas independientes. La lectura financiera exige flujos, márgenes y costo de capital que la serie no contiene.",
+        followUps: ["¿Qué es la sexta lectura?", "¿El capex se sostiene?"],
+      },
+      etica: {
+        title: "La matemática disciplina; no sustituye",
+        body: "La sexta lectura es ética de la titularidad. El argumento de corpus y poder es la posición normativa del autor. El resultado económico depende de adopción, precios, productividad, competencia y política pública. La página no atribuye probabilidad donde no hay modelo.",
+        followUps: ["¿Qué es el título?", "¿Qué no demuestra esta página?"],
+      },
+      estatuto: {
+        title: "El estatuto de esta página",
+        body: "Verificado: las cuentas cuadran. Inferido: riesgo de exceso y disputa de título. Propuesto: controles del simulador y la mezcla 60/40. Laguna: fuente fila por fila, perímetro común, márgenes, opex, residual y costo de capital.",
+        followUps: ["¿El capex se sostiene?", "¿Qué fuentes cita la página?"],
+      },
+      metodo: {
+        title: "Método y procedencia",
+        body: "“Cuadra” significa operación reproducible. “Fuente” nombra procedencia. “Benchmark” solo delimita plausibilidad. Goldman, McKinsey, el 10-K de Meta y Bloomberg Intelligence no validan la serie VIA; muestran que valor y perímetro dependen del modelo.",
+        followUps: ["¿El capex se sostiene?", "¿Qué no demuestra esta página?"],
+      },
+      perimetro: {
+        title: "Sostenerse es una conclusión condicional",
+        body: "No hay puente auditable entre capex global, ingreso incremental atribuible a la IA y el flujo de los mismos agentes. Sin ese perímetro, “sostenible” o “insostenible” sigue siendo conclusión condicional — no prueba matemática. La serie muestra un gap; no cierra el veredicto.",
+        followUps: ["¿El 19,8% es ROI?", "¿Qué no demuestra esta página?"],
+      },
+      simulador: {
+        title: "El simulador muestra consecuencia, no probabilidad",
+        body: "Tres controles: ingresos desde 2026, la fracción que es solo salario sustituido y la fracción del capex como el mismo producto. La lectura del autor — 70% y 50% — es ilustrativa. Arrastrar no estima el mundo; pone a prueba la identidad.",
+        followUps: ["¿Qué es la demanda que se borra?", "¿Por qué 2,7× no cierra la cuenta?"],
+      },
+      otimista: {
+        title: "Lo optimista llega al 66% — y aún no empata",
+        body: "En el escenario optimista el ingreso acumulado es 2510 mil M contra 3805 de capex: 66%. La línea del 100% en el gráfico es igualdad aritmética, no break-even económico. Aun la trayectoria alta queda por debajo del empate bruto.",
+        followUps: ["¿El 19,8% es ROI?", "¿El capex se sostiene?"],
+      },
+      autor: {
+        title: "Quién firma",
+        body: "Dr. Lucas HR Almeida, médico, Iniciativa VIA, Lavras. Manifiesto el 24 de septiembre de 2026; auditoría el 1 de octubre. Human-gate: la página conserva la tesis sin convertir la expectativa humana en certeza numérica.",
+        followUps: ["¿Qué es el título?", "¿Qué no demuestra esta página?"],
+      },
+    },
   },
 };

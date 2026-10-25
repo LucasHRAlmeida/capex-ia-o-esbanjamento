@@ -1,3 +1,4 @@
+import { FaqDock, FaqProvider, FaqTeaser } from "./components/faq-bot";
 import { CapexChart, CoverageChart, DeprecChart } from "./components/ledger-charts";
 import { Simulator } from "./components/simulator";
 import { LanguageSwitcher, useI18n } from "./i18n";
@@ -22,6 +23,7 @@ const NAV_ITEMS = [
   ["#esteira", "esteira"],
   ["#simulador", "simulador"],
   ["#estatuto", "estatuto"],
+  ["#pergunte", "pergunte"],
 ] as const;
 
 const MODULE_ITEMS = [
@@ -42,66 +44,70 @@ const SOURCE_HREFS = [
 export function Home() {
   const { t } = useI18n();
   return (
-    <div className="min-h-screen">
-      <header className="sticky top-0 z-20 border-b border-line bg-ink/95 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-3">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-            <a href="#topo" className="font-serif text-lg tracking-tight text-bone">
-              {t.ui.siteTitle}
-            </a>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-              <nav className="flex gap-1" aria-label={t.ui.modulesAria}>
-                {MODULE_ITEMS.map(([href, key], index) => (
-                  <a
-                    key={href}
-                    href={href}
-                    aria-current={index === 0 ? "page" : undefined}
-                    className={`border px-2.5 py-1.5 text-xs whitespace-nowrap ${
-                      index === 0
-                        ? "border-signal bg-signal text-ink"
-                        : "border-line text-muted hover:border-bone hover:text-bone"
-                    }`}
-                  >
-                    {t.modules[key]}
-                  </a>
-                ))}
-              </nav>
-              <LanguageSwitcher />
-            </div>
-          </div>
-          <nav className="flex min-w-0 flex-nowrap gap-1 overflow-x-auto" aria-label={t.ui.sectionsAria}>
-            {NAV_ITEMS.map(([href, key]) => (
-              <a
-                key={href}
-                href={href}
-                className="shrink-0 px-2 py-2 text-sm whitespace-nowrap text-muted hover:text-bone"
-              >
-                {t.nav[key]}
+    <FaqProvider>
+      <div className="min-h-screen">
+        <header className="sticky top-0 z-20 border-b border-line bg-ink/95 backdrop-blur-sm">
+          <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-3">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+              <a href="#topo" className="font-serif text-lg tracking-tight text-bone">
+                {t.ui.siteTitle}
               </a>
-            ))}
-          </nav>
-        </div>
-      </header>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                <nav className="flex gap-1" aria-label={t.ui.modulesAria}>
+                  {MODULE_ITEMS.map(([href, key], index) => (
+                    <a
+                      key={href}
+                      href={href}
+                      aria-current={index === 0 ? "page" : undefined}
+                      className={`border px-2.5 py-1.5 text-xs whitespace-nowrap ${
+                        index === 0
+                          ? "border-signal bg-signal text-ink"
+                          : "border-line text-muted hover:border-bone hover:text-bone"
+                      }`}
+                    >
+                      {t.modules[key]}
+                    </a>
+                  ))}
+                </nav>
+                <LanguageSwitcher />
+              </div>
+            </div>
+            <nav className="flex min-w-0 flex-nowrap gap-1 overflow-x-auto" aria-label={t.ui.sectionsAria}>
+              {NAV_ITEMS.map(([href, key]) => (
+                <a
+                  key={href}
+                  href={href}
+                  className="shrink-0 px-2 py-2 text-sm whitespace-nowrap text-muted hover:text-bone"
+                >
+                  {t.nav[key]}
+                </a>
+              ))}
+            </nav>
+          </div>
+        </header>
 
-      <main id="topo">
-        <Hero />
-        <Tese />
-        <Contas />
-        <Revisao />
-        <Metodo />
-        <Esteira />
-        <SimuladorSection />
-        <Escolas />
-        <Estatuto />
-      </main>
+        <main id="topo">
+          <Hero />
+          <Tese />
+          <Contas />
+          <Revisao />
+          <Metodo />
+          <Esteira />
+          <SimuladorSection />
+          <Escolas />
+          <Estatuto />
+        </main>
 
-      <footer className="border-t border-line">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-8 text-sm text-muted sm:flex-row sm:justify-between">
-          <p>{t.footer.left}</p>
-          <p>{t.footer.right}</p>
-        </div>
-      </footer>
-    </div>
+        <FaqTeaser />
+        <footer className="border-t border-line">
+          <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-8 text-sm text-muted sm:flex-row sm:justify-between">
+            <p>{t.footer.left}</p>
+            <p>{t.footer.right}</p>
+          </div>
+        </footer>
+        <FaqDock />
+      </div>
+    </FaqProvider>
   );
 }
 
@@ -359,7 +365,7 @@ function SimuladorSection() {
 function Escolas() {
   const { t } = useI18n();
   return (
-    <section className="scroll-mt-28 border-b border-line bg-panel">
+    <section id="escolas" className="scroll-mt-28 border-b border-line bg-panel">
       <div className="mx-auto max-w-6xl px-5 py-16 md:py-20">
         <SectionMark n="07" title={t.escolas.title} />
         <p className="mt-6 max-w-3xl text-sm text-muted">{t.escolas.intro}</p>
