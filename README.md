@@ -10,6 +10,8 @@ O código dessa página vive em [`site/`](site/) e o GitHub Actions publica no G
 
 **https://lucashralmeida.github.io/capex-ia-o-esbanjamento/**
 
+Canônico: [https://iniciativa-via.com/capex-ia-o-esbanjamento/](https://iniciativa-via.com/capex-ia-o-esbanjamento/). O mapa desta página sai no build (`site/public/sitemap.xml`) com PT / EN / ES e `lastmod` da última alteração significativa. O `robots.txt` da raiz do domínio ainda precisa listar esse sitemap; o ping `google.com/ping?sitemap=` foi descontinuado.
+
 O manifesto original, de página única, continua versionado em [`index.html`](index.html).
 
 ### Idiomas (PT / EN / ES)

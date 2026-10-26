@@ -34,7 +34,16 @@ jobs:
 
       - name: Instalar e gerar o site
         working-directory: site
-        run: npm ci && npm run build
+        run: npm ci && npm test && npm run build
+
+      - name: Conferir sitemap no artefato
+        run: |
+          test -f site/dist/sitemap.xml
+          test -f site/dist/robots.txt
+          grep -q 'lastmod>2026-10-25' site/dist/sitemap.xml
+          grep -q '?lang=en' site/dist/sitemap.xml
+          grep -q '?lang=es' site/dist/sitemap.xml
+          grep -q 'Sitemap: https://iniciativa-via.com/capex-ia-o-esbanjamento/sitemap.xml' site/dist/robots.txt
 
       # Pages já foi habilitado manualmente pelo Owner.
       # Não usar configure-pages: a integração conectada não possui permissão

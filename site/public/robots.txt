@@ -1,0 +1,9 @@
+# Página CAPEX — Iniciativa VIA
+# O robots.txt que o Googlebot lê no domínio é o da raiz:
+#   https://iniciativa-via.com/robots.txt
+# Este arquivo acompanha o artefato do Pages e declara o mapa desta página.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://iniciativa-via.com/capex-ia-o-esbanjamento/sitemap.xml
