@@ -377,6 +377,9 @@ const CARDS: readonly Card[] = [
       "no prueba",
       "no demuestra",
       "o que nao esta provado",
+      "faltam dados",
+      "faltan datos",
+      "missing data",
     ],
     entities: [],
     related: ["perimetro", "metodo"],
@@ -583,6 +586,26 @@ function containsTerm(text: string, term: string): boolean {
   return pattern.test(text);
 }
 
+// "falta" is the 3,050 shortfall. Without a trailing boundary the verb
+// faltam/faltan/faltando shares that stem, and "faltam dados" is answered
+// as the verified cumulative gap.
+function matchesAlias(text: string, alias: string): boolean {
+  if (alias === "falta") {
+    return /(?<![\p{L}])faltas?(?![\p{L}])/u.test(text);
+  }
+  return containsTerm(text, alias);
+}
+
+function namesDepreciation(text: string): boolean {
+  return containsTerm(text, "deprecia");
+}
+
+// 66% is the optimistic coverage ratio. 66 bi / bn / bilhões is the 2024
+// mixed-depreciation point, not 2,510.
+function sixtySixIsAmount(text: string): boolean {
+  return /(?<![\d.])66\s*(?:bi|bn|bilh\p{L}*|billion\p{L}*|mil)\b/u.test(text);
+}
+
 function namesMixedDepreciation(text: string): boolean {
   return containsTerm(text, "mista") || containsTerm(text, "mixta") || containsTerm(text, "mixed");
 }
@@ -596,7 +619,7 @@ function scoreCard(card: Card, text: string, tokens: Set<string>): number {
   for (const alias of card.aliases) {
     const folded = normalize(alias);
     if (!folded) continue;
-    if (containsTerm(text, folded)) {
+    if (matchesAlias(text, folded)) {
       score += folded.includes(" ") ? 4 : 3;
       continue;
     }
@@ -608,12 +631,16 @@ function scoreCard(card: Card, text: string, tokens: Set<string>): number {
   for (const entity of card.entities) {
     // A decimal identity has to outrank the two integers it is built from
     // (each +6, sum 12). 12 / 0.85 is the line where the runner-up forces a clarify.
-    // 66 on the mixed-depreciation series is not the optimistic coverage ratio.
-    const mixedPoint = card.id === "otimista" && entity === "66" && namesMixedDepreciation(text);
-    if (!mixedPoint && containsTerm(text, entity)) score += entity.includes(".") ? 15 : 6;
+    // 66 on a depreciation series is billions, not the optimistic coverage ratio.
+    const depreciationPoint =
+      card.id === "otimista" &&
+      entity === "66" &&
+      (namesMixedDepreciation(text) || namesDepreciation(text) || sixtySixIsAmount(text));
+    if (!depreciationPoint && containsTerm(text, entity)) score += entity.includes(".") ? 15 : 6;
     if (entity === "2.69" && (containsTerm(text, "2.7x") || /\b2\.7\b/.test(text))) score += 5;
     if (entity === "5.04" && (containsTerm(text, "5x") || /\b5\.0\b/.test(text))) score += 4;
   }
+  if (card.id === "depreciacao" && sixtySixIsAmount(text)) score += 6;
   return score;
 }
 
