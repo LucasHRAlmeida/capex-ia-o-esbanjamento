@@ -428,6 +428,11 @@ export const es: Dict = {
         body: "En el escenario optimista el ingreso acumulado es 2510 mil M contra 3805 de capex: 66%. La línea del 100% en el gráfico es igualdad aritmética, no break-even económico. Aun la trayectoria alta queda por debajo del empate bruto.",
         followUps: ["¿El 19,8% es ROI?", "¿El capex se sostiene?"],
       },
+      pessimista: {
+        title: "Lo pesimista se queda en el 8,5%",
+        body: "En el escenario pesimista el ingreso acumulado es 325 mil M contra 3805 de capex: 8,5% en 2030. También queda por debajo de la igualdad aritmética. La cifra cuadra con la serie publicada; no es break-even económico ni consenso de mercado.",
+        followUps: ["En el optimista el ingreso es 2510", "¿El 19,8% es ROI?"],
+      },
       autor: {
         title: "Quién firma",
         body: "Dr. Lucas HR Almeida, médico, Iniciativa VIA, Lavras. Manifiesto el 24 de septiembre de 2026; auditoría el 1 de octubre. Human-gate: la página conserva la tesis sin convertir la expectativa humana en certeza numérica.",

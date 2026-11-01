@@ -21,6 +21,7 @@ export const CARD_IDS = [
   "perimetro",
   "simulador",
   "otimista",
+  "pessimista",
   "autor",
 ] as const;
 
@@ -244,6 +245,7 @@ const CARDS: readonly Card[] = [
     aliases: [
       "esteira",
       "mista",
+      "mixta",
       "mixed",
       "60 40",
       "silicio",
@@ -447,12 +449,25 @@ const CARDS: readonly Card[] = [
       "otimista",
       "optimistic",
       "optimista",
-      "pessimista",
-      "pessimistic",
       "cenario otimista",
     ],
     entities: ["66", "2510"],
     related: ["cobertura", "serie"],
+  },
+  {
+    id: "pessimista",
+    section: "#contas",
+    epistemic: "verified",
+    aliases: [
+      "pessimista",
+      "pessimistic",
+      "pesimista",
+      "cenario pessimista",
+      "pessimistic scenario",
+      "escenario pesimista",
+    ],
+    entities: ["325", "8.5"],
+    related: ["otimista", "cobertura", "serie"],
   },
   {
     id: "autor",
@@ -557,10 +572,19 @@ function escapeRegExp(value: string): string {
 
 // Figures are whole tokens. A bare includes() reads 25 inside 2025 and 2.510,
 // and 33 inside 5.33, then stamps the wrong card and the wrong statute.
+// A letter glued in front is the same miss: "mista" sits inside "otimista",
+// "pessimista" and "pesimista", and "race" sits inside "tracejado".
 function containsTerm(text: string, term: string): boolean {
-  if (!/\d/.test(term)) return text.includes(term);
+  if (!/\d/.test(term)) {
+    const pattern = new RegExp(`(?<![\\p{L}])${escapeRegExp(term)}`, "u");
+    return pattern.test(text);
+  }
   const pattern = new RegExp(`(?<![\\d.])${escapeRegExp(term)}(?![\\d.])`);
   return pattern.test(text);
+}
+
+function namesMixedDepreciation(text: string): boolean {
+  return containsTerm(text, "mista") || containsTerm(text, "mixta") || containsTerm(text, "mixed");
 }
 
 function isFollowUp(text: string): boolean {
@@ -584,7 +608,9 @@ function scoreCard(card: Card, text: string, tokens: Set<string>): number {
   for (const entity of card.entities) {
     // A decimal identity has to outrank the two integers it is built from
     // (each +6, sum 12). 12 / 0.85 is the line where the runner-up forces a clarify.
-    if (containsTerm(text, entity)) score += entity.includes(".") ? 15 : 6;
+    // 66 on the mixed-depreciation series is not the optimistic coverage ratio.
+    const mixedPoint = card.id === "otimista" && entity === "66" && namesMixedDepreciation(text);
+    if (!mixedPoint && containsTerm(text, entity)) score += entity.includes(".") ? 15 : 6;
     if (entity === "2.69" && (containsTerm(text, "2.7x") || /\b2\.7\b/.test(text))) score += 5;
     if (entity === "5.04" && (containsTerm(text, "5x") || /\b5\.0\b/.test(text))) score += 4;
   }

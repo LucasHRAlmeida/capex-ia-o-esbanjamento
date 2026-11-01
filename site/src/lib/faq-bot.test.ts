@@ -101,6 +101,41 @@ test("a identidade decimal não perde para os operandos", () => {
   assert.equal(respond("receita 260, depreciação 400,5, capex 700").cards[0], "esteira");
 });
 
+test("o pessimista não herda os 2.510 e os 66% do otimista", () => {
+  const en = respond("What about the pessimistic scenario?");
+  assert.equal(en.cards[0], "pessimista");
+  assert.equal(en.kind, "match");
+  assert.equal(en.epistemic, "verified");
+  assert.equal(respond("cenário pessimista").cards[0], "pessimista");
+  assert.equal(respond("escenario pesimista").cards[0], "pessimista");
+  assert.equal(respond("No pessimista a receita acumulada é 325").cards[0], "pessimista");
+  assert.equal(respond("a cobertura pessimista é 8,5%").cards[0], "pessimista");
+  assert.equal(respond("otimista").cards[0], "otimista");
+  assert.equal(respond("otimista").kind, "match");
+  assert.equal(respond("optimista").cards[0], "otimista");
+  assert.equal(respond("o 66%").cards[0], "otimista");
+  assert.equal(respond("What is 66%?").cards[0], "otimista");
+  assert.equal(respond("In the optimistic scenario revenue is 2,510").cards[0], "otimista");
+  assert.equal(respond("En el optimista el ingreso es 2510").cards[0], "otimista");
+});
+
+test("66 da depreciação mista não é a cobertura otimista", () => {
+  for (const query of ["depreciação mista 66", "mixed depreciation of 66", "mixta 66"]) {
+    const reply = respond(query);
+    assert.notEqual(reply.cards[0], "otimista");
+    assert.equal(reply.epistemic, "proposed");
+  }
+  assert.equal(respond("mista").cards[0], "esteira");
+});
+
+test("mista e race não casam no meio de outra palavra", () => {
+  assert.equal(respond("o que é o tracejado?").kind, "fallback");
+  assert.equal(respond("competição").cards[0], "mesmoProduto");
+  assert.equal(respond("competição").kind, "match");
+  assert.equal(respond("buildings").cards[0], "esteira");
+  assert.equal(respond("SPVs").cards[0], "divida");
+});
+
 test("os chips em inglês e espanhol não caem fora do perímetro", () => {
   assert.equal(respond("Is capex minus revenue a loss?").cards[0], "identidade");
   assert.equal(respond("What does the 2030 stack show?").cards[0], "esteira");
