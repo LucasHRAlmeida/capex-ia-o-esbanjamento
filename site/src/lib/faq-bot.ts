@@ -152,6 +152,8 @@ const CARDS: readonly Card[] = [
       "nao e prejuizo",
       "not a loss",
       "no es perdida",
+      "capex minus revenue",
+      "capex menos ingresos",
       "identidade",
       "identity",
     ],
@@ -248,6 +250,8 @@ const CARDS: readonly Card[] = [
       "silicon",
       "casca",
       "building",
+      "stack",
+      "cinta",
       "400.5",
     ],
     entities: ["400.5", "482", "677", "260", "700"],
@@ -369,6 +373,7 @@ const CARDS: readonly Card[] = [
       "nao prova",
       "does not prove",
       "no prueba",
+      "no demuestra",
       "o que nao esta provado",
     ],
     entities: [],
@@ -446,7 +451,7 @@ const CARDS: readonly Card[] = [
       "pessimistic",
       "cenario otimista",
     ],
-    entities: ["66"],
+    entities: ["66", "2510"],
     related: ["cobertura", "serie"],
   },
   {
@@ -546,6 +551,18 @@ function tokensOf(text: string): Set<string> {
   return new Set(text.split(" ").filter((token) => token && !STOP.has(token)));
 }
 
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+// Figures are whole tokens. A bare includes() reads 25 inside 2025 and 2.510,
+// and 33 inside 5.33, then stamps the wrong card and the wrong statute.
+function containsTerm(text: string, term: string): boolean {
+  if (!/\d/.test(term)) return text.includes(term);
+  const pattern = new RegExp(`(?<![\\d.])${escapeRegExp(term)}(?![\\d.])`);
+  return pattern.test(text);
+}
+
 function isFollowUp(text: string): boolean {
   return FOLLOW_UP.test(text);
 }
@@ -555,7 +572,7 @@ function scoreCard(card: Card, text: string, tokens: Set<string>): number {
   for (const alias of card.aliases) {
     const folded = normalize(alias);
     if (!folded) continue;
-    if (text.includes(folded)) {
+    if (containsTerm(text, folded)) {
       score += folded.includes(" ") ? 4 : 3;
       continue;
     }
@@ -565,9 +582,11 @@ function scoreCard(card: Card, text: string, tokens: Set<string>): number {
     }
   }
   for (const entity of card.entities) {
-    if (text.includes(entity)) score += 6;
-    if (entity === "2.69" && (text.includes("2.7x") || /\b2\.7\b/.test(text))) score += 5;
-    if (entity === "5.04" && (text.includes("5x") || /\b5\.0\b/.test(text))) score += 4;
+    // A decimal identity has to outrank the two integers it is built from
+    // (each +6, sum 12). 12 / 0.85 is the line where the runner-up forces a clarify.
+    if (containsTerm(text, entity)) score += entity.includes(".") ? 15 : 6;
+    if (entity === "2.69" && (containsTerm(text, "2.7x") || /\b2\.7\b/.test(text))) score += 5;
+    if (entity === "5.04" && (containsTerm(text, "5x") || /\b5\.0\b/.test(text))) score += 4;
   }
   return score;
 }

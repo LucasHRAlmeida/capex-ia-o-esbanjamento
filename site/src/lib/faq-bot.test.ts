@@ -71,3 +71,40 @@ test("o que a página não prova aponta o estatuto", () => {
 test("memória começa vazia", () => {
   assert.deepEqual(emptyMemory(), { lastCards: [] });
 });
+
+test("2025 e 2.510 não são a parcela 25 da depreciação", () => {
+  assert.equal(respond("dívida em 2025").cards[0], "divida");
+  assert.equal(respond("debt in 2025").cards[0], "divida");
+  assert.equal(respond("deuda en 2025").cards[0], "divida");
+  assert.equal(respond("Goldman estima 27% em 2025").cards[0], "divida");
+  assert.equal(respond("Goldman estima 27% em 2025").kind, "match");
+  assert.equal(respond("No otimista a receita é 2.510").cards[0], "otimista");
+  assert.equal(respond("What is 2,510 bn?").cards[0], "otimista");
+  assert.equal(respond("35% mais 25%").cards[0], "depreciacao");
+});
+
+test("5,33× não é o 33% da dívida", () => {
+  const reply = respond("O que é o 5,33×?");
+  assert.equal(reply.cards[0], "multiplicadores");
+  assert.equal(reply.kind, "match");
+  assert.equal(respond("What does 5.33× mean?").cards[0], "multiplicadores");
+  assert.equal(respond("12,7× se só 2030 variar").cards[0], "multiplicadores");
+});
+
+test("a identidade decimal não perde para os operandos", () => {
+  assert.equal(respond("755 / 3.805 = 19,8%").cards[0], "cobertura");
+  assert.equal(respond("755 / 3.805 = 19,8%").epistemic, "verified");
+  const ratio = respond("700 / 260 = 2,69");
+  assert.equal(ratio.cards[0], "multiplicadores");
+  assert.equal(ratio.epistemic, "verified");
+  assert.equal(respond("3.050 / 170 = 17,9").cards[0], "netflix");
+  assert.equal(respond("receita 260, depreciação 400,5, capex 700").cards[0], "esteira");
+});
+
+test("os chips em inglês e espanhol não caem fora do perímetro", () => {
+  assert.equal(respond("Is capex minus revenue a loss?").cards[0], "identidade");
+  assert.equal(respond("What does the 2030 stack show?").cards[0], "esteira");
+  assert.equal(respond("¿Qué no demuestra esta página?").cards[0], "estatuto");
+  assert.equal(respond("¿Capex menos ingresos es pérdida?").cards[0], "identidade");
+  assert.equal(respond("¿Qué muestra la cinta en 2030?").cards[0], "esteira");
+});
