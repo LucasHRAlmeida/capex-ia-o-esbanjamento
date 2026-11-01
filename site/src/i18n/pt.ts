@@ -427,6 +427,11 @@ export const pt = {
         body: "No cenário otimista a receita acumulada é 2.510 bi contra 3.805 de capex: 66%. A linha de 100% no gráfico é igualdade aritmética, não break-even econômico. Mesmo a trajetória alta permanece abaixo do empate bruto.",
         followUps: ["O 19,8% é ROI?", "O capex se sustenta?"],
       },
+      pessimista: {
+        title: "O pessimista fica em 8,5%",
+        body: "No cenário pessimista a receita acumulada é 325 bi contra 3.805 de capex: 8,5% em 2030. Também fica abaixo da igualdade aritmética. O número confere com a série publicada; não é break-even econômico nem consenso de mercado.",
+        followUps: ["No otimista a receita é 2.510", "O 19,8% é ROI?"],
+      },
       autor: {
         title: "Quem assina",
         body: "Dr. Lucas HR Almeida, médico, Iniciativa VIA, Lavras. Manifesto em 24 de setembro de 2026; auditoria em 1º de outubro. Human-gate: a página conserva a tese sem converter expectativa humana em certeza numérica.",

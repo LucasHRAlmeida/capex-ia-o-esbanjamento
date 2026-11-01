@@ -428,6 +428,11 @@ export const en: Dict = {
         body: "In the optimistic scenario cumulative revenue is 2,510 bn against 3,805 of capex: 66%. The 100% line on the chart is arithmetic equality, not economic break-even. Even the high path stays below a gross tie.",
         followUps: ["Is 19.8% ROI?", "Does the capex hold up?"],
       },
+      pessimista: {
+        title: "The pessimistic case stays at 8.5%",
+        body: "In the pessimistic scenario cumulative revenue is 325 bn against 3,805 of capex: 8.5% in 2030. It also stays below arithmetic parity. The figure matches the published series; it is not economic break-even and it is not a market consensus.",
+        followUps: ["In the optimistic scenario revenue is 2,510", "Is 19.8% ROI?"],
+      },
       autor: {
         title: "Who signs",
         body: "Dr. Lucas HR Almeida, physician, VIA Initiative, Lavras. Manifesto on September 24, 2026; audit on October 1. Human-gate: the page keeps the thesis without converting human expectation into numerical certainty.",
