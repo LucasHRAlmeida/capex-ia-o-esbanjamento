@@ -136,6 +136,53 @@ test("mista e race não casam no meio de outra palavra", () => {
   assert.equal(respond("SPVs").cards[0], "divida");
 });
 
+test("faltam dados não é o gap verificado de 3.050", () => {
+  for (const query of ["faltam dados", "faltam os dados", "faltan datos", "missing data"]) {
+    const reply = respond(query);
+    assert.equal(reply.cards[0], "estatuto", query);
+    assert.equal(reply.kind, "match", query);
+    assert.equal(reply.epistemic, "gap", query);
+    assert.equal(reply.cards.includes("gap"), false, query);
+  }
+  assert.equal(respond("qual é a falta?").cards[0], "gap");
+  assert.equal(respond("a falta de 3.050").cards[0], "gap");
+  assert.equal(respond("a falta de 3.050").epistemic, "verified");
+  assert.equal(respond("está faltando a fonte").cards[0] === "gap", false);
+});
+
+test("66 da depreciação não é a cobertura otimista de 2.510", () => {
+  for (const query of [
+    "depreciação 66",
+    "depreciação de 66",
+    "66 de depreciação",
+    "depreciation of 66",
+    "66 depreciation",
+    "depreciación 66",
+    "66 de depreciación",
+    "66 bi",
+    "66 bn",
+    "66 bilhões",
+  ]) {
+    const reply = respond(query);
+    assert.notEqual(reply.cards[0], "otimista", query);
+    assert.notEqual(reply.epistemic, "verified", query);
+  }
+  for (const query of [
+    "depreciação 66",
+    "depreciation of 66",
+    "depreciación 66",
+    "66 bi",
+    "66 bn",
+    "66 bilhões",
+  ]) {
+    const reply = respond(query);
+    assert.equal(reply.cards[0], "depreciacao", query);
+    assert.equal(reply.epistemic, "proposed", query);
+  }
+  assert.equal(respond("o 66%").cards[0], "otimista");
+  assert.equal(respond("What is 66%?").cards[0], "otimista");
+});
+
 test("os chips em inglês e espanhol não caem fora do perímetro", () => {
   assert.equal(respond("Is capex minus revenue a loss?").cards[0], "identidade");
   assert.equal(respond("What does the 2030 stack show?").cards[0], "esteira");
