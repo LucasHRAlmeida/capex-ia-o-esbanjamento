@@ -564,6 +564,9 @@ export function normalize(raw: string): string {
     .replace(/[×]/g, "x")
     .replace(/\b(\d{1,3})[.,](\d{3})\b/g, "$1$2")
     .replace(/(\d),(\d+)/g, "$1.$2")
+    // The page writes the mix and the 2030 ratio as 60/40 and 700/260.
+    // A slash glues each pair into one token, so the mix is refused.
+    .replace(/(\d)\s*\/\s*(\d)/g, "$1 $2")
     .replace(/[^\p{L}\p{N}.\s%/x-]+/gu, " ")
     .replace(/\s+/g, " ")
     .trim();
@@ -604,14 +607,110 @@ function namesDepreciation(text: string): boolean {
   return containsTerm(text, "deprecia");
 }
 
+function amountOf(text: string, number: string): boolean {
+  return new RegExp(
+    `(?<![\\d.])${escapeRegExp(number)}\\s*(?:bi|bn|bilh\\p{L}*|billion\\p{L}*|mil)\\b`,
+    "u",
+  ).test(text);
+}
+
+function percentOf(text: string, number: string): boolean {
+  return new RegExp(
+    `(?<![\\d.])${escapeRegExp(number)}\\s*(?:%|por\\s+cento|por\\s+ciento|percent\\p{L}*)`,
+    "u",
+  ).test(text);
+}
+
+function namesRevenue(text: string): boolean {
+  return containsTerm(text, "receita") || containsTerm(text, "revenue") || containsTerm(text, "ingreso");
+}
+
+function namesBaseSeries(text: string): boolean {
+  return (
+    containsTerm(text, "cenario base") ||
+    containsTerm(text, "escenario base") ||
+    containsTerm(text, "base case")
+  );
+}
+
+function namesPessimistic(text: string): boolean {
+  return containsTerm(text, "pessimist") || containsTerm(text, "pesimist");
+}
+
+function namesOptimistic(text: string): boolean {
+  return containsTerm(text, "otimist") || containsTerm(text, "optimist");
+}
+
+function namesSubscribers(text: string): boolean {
+  return (
+    containsTerm(text, "assinant") ||
+    containsTerm(text, "assinatur") ||
+    containsTerm(text, "subscriber") ||
+    containsTerm(text, "suscriptor") ||
+    containsTerm(text, "netflix")
+  );
+}
+
 // 66% is the optimistic coverage ratio. 66 bi / bn / bilhões is the 2024
 // mixed-depreciation point, not 2,510.
 function sixtySixIsAmount(text: string): boolean {
-  return /(?<![\d.])66\s*(?:bi|bn|bilh\p{L}*|billion\p{L}*|mil)\b/u.test(text);
+  return amountOf(text, "66");
 }
 
 function namesMixedDepreciation(text: string): boolean {
   return containsTerm(text, "mista") || containsTerm(text, "mixta") || containsTerm(text, "mixed");
+}
+
+// 25 on the revenue series is US$ 25 bi in 2025. The depreciation card's 25
+// is a percent. An amount or a revenue question must not inherit that rule.
+function revenueTwentyFive(text: string): boolean {
+  if (!containsTerm(text, "25") || percentOf(text, "25") || namesDepreciation(text)) return false;
+  return amountOf(text, "25") || namesRevenue(text) || namesBaseSeries(text);
+}
+
+// 2026 pessimistic revenue is 35 bi. Bare 35 bi stays the published
+// depreciation amount. Naming that revenue on the pessimistic path does not.
+function pessimisticRevenueThirtyFive(text: string): boolean {
+  if (!containsTerm(text, "35") || percentOf(text, "35") || namesDepreciation(text)) return false;
+  if (!namesPessimistic(text)) return false;
+  return namesRevenue(text) || amountOf(text, "35");
+}
+
+// 2029 optimistic revenue is 700. The stack's 700 is capex, and that card
+// states revenue 260. Capex in the question keeps the stack.
+function optimisticRevenueSevenHundred(text: string): boolean {
+  if (!containsTerm(text, "700") || !namesOptimistic(text) || !namesRevenue(text)) return false;
+  return !containsTerm(text, "capex");
+}
+
+// 3,050 / 170 is the subscriber equivalence, not a restatement of the gap.
+function subscriberDivision(text: string): boolean {
+  return containsTerm(text, "3050") && (containsTerm(text, "170") || namesSubscribers(text));
+}
+
+// 700 and 260 together are the verified 2.69× identity, unless the question
+// is the depreciation stack that also lists 400.5, 482 and 677.
+function is2030CapexOverRevenue(text: string): boolean {
+  if (!containsTerm(text, "700") || !containsTerm(text, "260")) return false;
+  if (namesDepreciation(text) || namesMixedDepreciation(text)) return false;
+  if (containsTerm(text, "400.5") || containsTerm(text, "482") || containsTerm(text, "677")) return false;
+  if (containsTerm(text, "esteira") || containsTerm(text, "stack") || containsTerm(text, "cinta")) return false;
+  return true;
+}
+
+function entityIsForeign(cardId: CardId, entity: string, text: string): boolean {
+  if (
+    cardId === "otimista" &&
+    entity === "66" &&
+    (namesMixedDepreciation(text) || namesDepreciation(text) || sixtySixIsAmount(text))
+  ) {
+    return true;
+  }
+  if (cardId === "depreciacao" && entity === "25" && revenueTwentyFive(text)) return true;
+  if (cardId === "depreciacao" && entity === "35" && pessimisticRevenueThirtyFive(text)) return true;
+  if (cardId === "esteira" && entity === "700" && optimisticRevenueSevenHundred(text)) return true;
+  if (cardId === "gap" && entity === "3050" && subscriberDivision(text)) return true;
+  return false;
 }
 
 function isFollowUp(text: string): boolean {
@@ -635,16 +734,19 @@ function scoreCard(card: Card, text: string, tokens: Set<string>): number {
   for (const entity of card.entities) {
     // A decimal identity has to outrank the two integers it is built from
     // (each +6, sum 12). 12 / 0.85 is the line where the runner-up forces a clarify.
-    // 66 on a depreciation series is billions, not the optimistic coverage ratio.
-    const depreciationPoint =
-      card.id === "otimista" &&
-      entity === "66" &&
-      (namesMixedDepreciation(text) || namesDepreciation(text) || sixtySixIsAmount(text));
-    if (!depreciationPoint && containsTerm(text, entity)) score += entity.includes(".") ? 15 : 6;
+    // A foreign reading of the same digits (25 bi, pessimistic 35, optimistic
+    // revenue 700, 3,050/170) must not take the point.
+    if (!entityIsForeign(card.id, entity, text) && containsTerm(text, entity)) {
+      score += entity.includes(".") ? 15 : 6;
+    }
     if (entity === "2.69" && (containsTerm(text, "2.7x") || /\b2\.7\b/.test(text))) score += 5;
     if (entity === "5.04" && (containsTerm(text, "5x") || /\b5\.0\b/.test(text))) score += 4;
   }
   if (card.id === "depreciacao" && sixtySixIsAmount(text)) score += 6;
+  if (card.id === "serie" && revenueTwentyFive(text)) score += 6;
+  // Above the stack's 6+6 and above the 0.7 extra-card line (20 * 0.7 = 14).
+  if (card.id === "multiplicadores" && is2030CapexOverRevenue(text)) score += 20;
+  if (card.id === "netflix" && subscriberDivision(text)) score += 8;
   return score;
 }
 

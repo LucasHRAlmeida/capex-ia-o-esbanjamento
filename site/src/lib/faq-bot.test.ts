@@ -197,3 +197,108 @@ test("escolha por id não reclassifica o título do cartão", () => {
   assert.equal(respondCard("escolas").kind, "match");
   assert.equal(respond("malinvestment").cards[0], "escolas");
 });
+
+test("25 bi de receita em 2025 não é a regra de 25%", () => {
+  for (const query of [
+    "25 bi",
+    "25 bilhões",
+    "25 bn",
+    "25 billion",
+    "receita de 25",
+    "receita de 25 bi em 2025",
+    "em 2025 a receita é 25",
+    "base revenue of 25",
+    "2025 revenue 25 billion",
+    "ingresos de 25 mil millones",
+    "25 mil milhões",
+    "no cenário base a receita é 25",
+    "escenario base ingreso 25",
+  ]) {
+    const reply = respond(query);
+    assert.equal(reply.cards[0], "serie", query);
+    assert.equal(reply.epistemic, "verified", query);
+    assert.equal(reply.cards.includes("depreciacao"), false, query);
+  }
+  assert.equal(respond("35% mais 25%").cards[0], "depreciacao");
+  assert.equal(respond("25%").cards[0], "depreciacao");
+  assert.equal(respond("25% do capex").cards[0], "depreciacao");
+  assert.equal(respond("35 percent plus 25 percent").cards[0], "depreciacao");
+  assert.equal(respond("depreciação de 25 bi").cards[0], "depreciacao");
+});
+
+test("receita pessimista de 35 não herda a regra de 35%", () => {
+  for (const query of [
+    "no pessimista a receita é 35",
+    "a receita pessimista em 2026 é 35",
+    "pessimistic revenue of 35",
+    "en el pesimista el ingreso es 35",
+    "35 bi no pessimista",
+  ]) {
+    const reply = respond(query);
+    assert.equal(reply.cards[0], "pessimista", query);
+    assert.equal(reply.kind, "match", query);
+    assert.equal(reply.epistemic, "verified", query);
+    assert.equal(reply.cards.includes("depreciacao"), false, query);
+  }
+  assert.equal(respond("35 bi").cards[0], "depreciacao");
+  assert.equal(respond("35%").cards[0], "depreciacao");
+  assert.equal(respond("depreciação de 35 bi").cards[0], "depreciacao");
+  assert.equal(respond("35 bn depreciation").cards[0], "depreciacao");
+  assert.equal(respond("cenário pessimista 35").kind, "clarify");
+});
+
+test("receita otimista de 700 não é o capex da esteira", () => {
+  for (const query of [
+    "no otimista a receita é 700",
+    "no otimista, a receita de 2029 é 700",
+    "optimistic revenue is 700",
+    "optimistic revenue of 700 bn",
+    "en el optimista el ingreso es 700",
+  ]) {
+    const reply = respond(query);
+    assert.equal(reply.cards[0], "otimista", query);
+    assert.equal(reply.kind, "match", query);
+    assert.equal(reply.epistemic, "verified", query);
+    assert.equal(reply.cards.includes("esteira"), false, query);
+  }
+  assert.equal(respond("capex de 700").cards[0], "esteira");
+  assert.equal(respond("no otimista o capex é 700").cards[0], "esteira");
+  assert.equal(respond("700 bi").cards[0], "esteira");
+});
+
+test("700/260 é o multiplicador verificado e 60/40 continua a mistura", () => {
+  for (const query of ["700/260", "700 / 260", "quanto é 700/260?", "700 dividido por 260"]) {
+    const reply = respond(query);
+    assert.equal(reply.cards[0], "multiplicadores", query);
+    assert.equal(reply.epistemic, "verified", query);
+    assert.equal(reply.cards.includes("esteira"), false, query);
+  }
+  assert.equal(normalize("60/40"), "60 40");
+  assert.equal(normalize("700/260"), "700 260");
+  for (const query of ["60/40", "a mistura 60/40", "60/40 split", "división 60/40"]) {
+    const reply = respond(query);
+    assert.equal(reply.cards[0], "esteira", query);
+    assert.equal(reply.epistemic, "proposed", query);
+  }
+  assert.equal(respond("35/25").cards[0], "depreciacao");
+  assert.equal(respond("receita 260, depreciação 400,5, capex 700").cards[0], "esteira");
+});
+
+test("3.050/170 é a equivalência de assinantes, não o gap", () => {
+  for (const query of [
+    "3.050/170",
+    "3.050 / 170",
+    "quanto é 3.050 dividido por 170?",
+    "quantos assinantes dá 3.050 / 170?",
+    "how many subscribers is 3050/170?",
+  ]) {
+    const reply = respond(query);
+    assert.equal(reply.cards[0], "netflix", query);
+    assert.equal(reply.kind, "match", query);
+    assert.equal(reply.epistemic, "verified", query);
+    assert.equal(reply.cards.includes("gap"), false, query);
+  }
+  assert.equal(respond("a falta de 3.050").cards[0], "gap");
+  assert.equal(respond("a falta de 3.050").epistemic, "verified");
+  assert.equal(respond("3.050 / 170 = 17,9").cards[0], "netflix");
+});
