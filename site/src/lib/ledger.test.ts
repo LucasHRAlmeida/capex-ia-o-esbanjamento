@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   CAPEX_TOTAL,
   COBERTURA_BASE,
+  COBERTURA_PESSIMISTA,
   RECEITA,
   RECEITA_BASE_TOTAL,
   breakEvenMultiplier,
@@ -29,6 +30,13 @@ test("2,69× iguala apenas receita e capex de 2030", () => {
 test("o fator futuro mantém 2023–2025 fixos", () => {
   assert.ok(Math.abs(breakEvenMultiplier("base", 0) - 5.3262) < 0.001);
   assert.ok(Math.abs(breakEvenMultiplier("base", 0.7) - 17.7541) < 0.001);
+});
+
+test("o pessimista publicado soma 325 bi e cobre 8,5%", () => {
+  assert.equal(sum(RECEITA.pessimista), 325);
+  assert.equal(sum(RECEITA.otimista), 2510);
+  assert.ok(Math.abs(coberturaAcumulada(RECEITA.pessimista).at(-1)! - 8.5414) < 0.001);
+  assert.equal(COBERTURA_PESSIMISTA.at(-1), 8.5);
 });
 
 test("o cenário do autor permanece explicitamente paramétrico", () => {

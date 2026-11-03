@@ -1,3 +1,4 @@
+import { FaqDock, FaqProvider, FaqTeaser } from "./components/faq-bot";
 import { CapexChart, CoverageChart, DeprecChart } from "./components/ledger-charts";
 import { Simulator } from "./components/simulator";
 import { LanguageSwitcher, useI18n } from "./i18n";
@@ -22,6 +23,7 @@ const NAV_ITEMS = [
   ["#esteira", "esteira"],
   ["#simulador", "simulador"],
   ["#estatuto", "estatuto"],
+  ["#pergunte", "pergunte"],
 ] as const;
 
 const MODULE_ITEMS = [
@@ -42,7 +44,8 @@ const SOURCE_HREFS = [
 export function Home() {
   const { t } = useI18n();
   return (
-    <div className="min-h-screen">
+    <FaqProvider>
+      <div className="min-h-screen">
       <header className="sticky top-0 z-20 border-b border-line bg-ink/95 backdrop-blur-sm">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-3">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
@@ -101,13 +104,16 @@ export function Home() {
         <Estatuto />
       </main>
 
+      <FaqTeaser />
       <footer className="border-t border-line">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-8 text-sm text-muted sm:flex-row sm:justify-between">
           <p>{t.footer.left}</p>
           <p>{t.footer.right}</p>
         </div>
       </footer>
-    </div>
+      <FaqDock />
+      </div>
+    </FaqProvider>
   );
 }
 
@@ -365,7 +371,7 @@ function SimuladorSection() {
 function Escolas() {
   const { t } = useI18n();
   return (
-    <section className="scroll-mt-28 border-b border-line bg-panel">
+    <section id="escolas" className="scroll-mt-28 border-b border-line bg-panel">
       <div className="mx-auto max-w-6xl px-5 py-16 md:py-20">
         <SectionMark n="07" title={t.escolas.title} />
         <p className="mt-6 max-w-3xl text-sm text-muted">{t.escolas.intro}</p>

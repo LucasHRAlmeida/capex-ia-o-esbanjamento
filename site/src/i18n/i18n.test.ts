@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { CARD_IDS } from "../lib/faq-bot.ts";
 import { bi, pct } from "../lib/ledger.ts";
 import { en } from "./en.ts";
 import { es } from "./es.ts";
@@ -41,6 +42,14 @@ test("as fontes citadas continuam com o mesmo número de entradas por idioma", (
   assert.equal(es.metodo.sources.length, pt.metodo.sources.length);
   assert.equal(en.contas.headers.length, 8);
   assert.equal(es.contas.headers.length, 8);
+});
+
+test("o leitor tem carta e dois follow-ups para cada id", () => {
+  for (const id of CARD_IDS) {
+    assert.equal(pt.bot.cards[id].followUps.length, 2);
+    assert.equal(en.bot.cards[id].followUps.length, 2);
+    assert.equal(es.bot.cards[id].followUps.length, 2);
+  }
 });
 
 test("números seguem o separador de cada idioma", () => {
