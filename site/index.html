@@ -16,6 +16,85 @@
       href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,640;9..144,700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap"
       rel="stylesheet"
     />
+    <style>
+      /* Correção de contraste — FAQ dialógico e superfícies da página */
+      dialog,
+      [role="dialog"],
+      .faq-dialog,
+      .faq-modal,
+      .faq-panel {
+        color: #f4f7fb !important;
+        background: #101725 !important;
+        border: 1px solid #3d4d6b !important;
+        box-shadow: 0 24px 70px rgba(0, 0, 0, .55) !important;
+      }
+
+      dialog::backdrop,
+      .faq-backdrop,
+      .modal-backdrop {
+        background: rgba(4, 7, 13, .78) !important;
+        backdrop-filter: blur(3px);
+      }
+
+      dialog h1, dialog h2, dialog h3, dialog h4,
+      [role="dialog"] h1, [role="dialog"] h2,
+      [role="dialog"] h3, [role="dialog"] h4,
+      .faq-dialog h1, .faq-dialog h2,
+      .faq-dialog h3, .faq-dialog h4 {
+        color: #ffffff !important;
+      }
+
+      dialog p, dialog li, dialog label, dialog small,
+      [role="dialog"] p, [role="dialog"] li,
+      [role="dialog"] label, [role="dialog"] small,
+      .faq-dialog p, .faq-dialog li,
+      .faq-dialog label, .faq-dialog small {
+        color: #d7deea !important;
+      }
+
+      dialog a, [role="dialog"] a, .faq-dialog a {
+        color: #7fd8ff !important;
+        text-decoration-color: rgba(127, 216, 255, .55);
+      }
+
+      dialog button,
+      [role="dialog"] button,
+      .faq-dialog button {
+        color: #f4f7fb !important;
+        background: #1d2840 !important;
+        border: 1px solid #4d5f80 !important;
+      }
+
+      dialog button:hover,
+      [role="dialog"] button:hover,
+      .faq-dialog button:hover {
+        background: #27344f !important;
+        border-color: #7f92b4 !important;
+      }
+
+      dialog input, dialog textarea, dialog select,
+      [role="dialog"] input, [role="dialog"] textarea, [role="dialog"] select,
+      .faq-dialog input, .faq-dialog textarea, .faq-dialog select {
+        color: #f4f7fb !important;
+        background: #0d1420 !important;
+        border: 1px solid #46587a !important;
+      }
+
+      dialog input::placeholder, dialog textarea::placeholder,
+      [role="dialog"] input::placeholder, [role="dialog"] textarea::placeholder,
+      .faq-dialog input::placeholder, .faq-dialog textarea::placeholder {
+        color: #9aa6ba !important;
+      }
+
+      /* Contraste geral mais seguro em textos secundários */
+      body {
+        color: #eef2f8;
+      }
+
+      .muted, .text-muted, .subtle, .description, .help-text {
+        color: #b9c3d4 !important;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
