@@ -129,6 +129,14 @@ function Hero() {
             <span className="mt-3 block text-bone-dim">{t.hero.h1b}</span>
           </h1>
           <p className="mt-8 max-w-2xl text-xl leading-snug text-bone-dim">{t.hero.lead}</p>
+          <a
+            href="https://github.com/LucasHRAlmeida/capex-ia-o-esbanjamento/blob/main/TESE.md"
+            target="_blank"
+            rel="noreferrer"
+            className="mt-6 inline-flex min-h-12 items-center gap-2 border border-oxide bg-oxide/10 px-6 py-3 text-sm font-semibold text-oxide transition-colors hover:bg-oxide hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxide"
+          >
+            {t.ui.manifesto}
+          </a>
         </div>
         <aside className="flex flex-col justify-end border-t border-line pt-6 md:col-span-4 md:border-t-0 md:border-l md:pt-0 md:pl-8">
           <p className="font-serif text-2xl leading-snug text-bone">{t.hero.quote}</p>
