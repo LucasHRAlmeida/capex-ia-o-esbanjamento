@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+import manifesto from "../../TESE.md?raw";
 import { FaqDock, FaqProvider, FaqTeaser } from "./components/faq-bot";
 import { CapexChart, CoverageChart, DeprecChart } from "./components/ledger-charts";
 import { Simulator } from "./components/simulator";
@@ -40,6 +42,34 @@ const SOURCE_HREFS = [
   "https://www.goldmansachs.com/insights/goldman-sachs-exchanges/how-ai-debt-is-reshaping-the-credit-market",
   "https://www.bloomberg.com/company/press/generative-ai-market-poised-to-reach-2-3-trillion-by-2032-as-agentic-systems-proliferate-and-infrastructure-demand-surges-according-to-bloomberg-intelligence/",
 ] as const;
+
+function Manifesto() {
+  const [title, ...blocks] = manifesto.trim().split(/\r?\n\r?\n/);
+  const inline = (text: string) =>
+    text.split(/(\*\*[^*]+\*\*)/g).map((part, index) =>
+      part.startsWith("**") ? <strong key={index}>{part.slice(2, -2)}</strong> : part
+    );
+
+  return (
+    <article id="manifesto" lang="pt-BR" className="mx-auto max-w-3xl scroll-mt-40 px-5 py-14">
+      <h1 className="mb-6 font-serif text-4xl text-bone">{title.replace(/^# /, "")}</h1>
+      <p className="mb-6 text-sm text-bone-dim">Texto autoral de 24 de setembro de 2026. A auditoria a seguir revisa as hipóteses e as contas da formulação original.</p>
+      <div className="space-y-4 text-bone-dim">
+        {blocks.map((block, index) => {
+          if (block === "---") return <hr key={index} className="border-line" />;
+          if (block.startsWith("## ")) return <h3 key={index} className="pt-4 font-serif text-2xl text-bone">{block.slice(3)}</h3>;
+          if (block.startsWith("> ")) return <blockquote key={index} className="border-l-2 border-oxide pl-4 text-bone">{inline(block.slice(2))}</blockquote>;
+          if (/^(?:1\. |- )/.test(block)) {
+            const List = block.startsWith("1. ") ? "ol" : "ul";
+            return <List key={index} className={List === "ol" ? "list-decimal space-y-3 pl-6" : "list-disc space-y-2 pl-6"}>{block.split(/\r?\n/).map((line, lineIndex) => <li key={lineIndex}>{inline(line.replace(/^(?:\d+\. |- )/, ""))}</li>)}</List>;
+          }
+          if (block.startsWith("*") && !block.startsWith("**") && block.endsWith("*")) return <p key={index}><em>{block.slice(1, -1)}</em></p>;
+          return <p key={index} className="whitespace-pre-line">{inline(block)}</p>;
+        })}
+      </div>
+    </article>
+  );
+}
 
 export function Home() {
   const { t } = useI18n();
@@ -93,6 +123,7 @@ export function Home() {
       </header>
 
       <main id="topo">
+        <Manifesto />
         <Hero />
         <Tese />
         <Contas />
@@ -124,18 +155,16 @@ function Hero() {
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 md:grid-cols-12 md:py-24">
         <div className="md:col-span-8">
           <p className="text-xs tracking-[0.22em] text-oxide uppercase">{t.hero.kicker}</p>
-          <h1 className="mt-6 font-serif text-5xl leading-[1.05] font-medium tracking-tight text-bone md:text-7xl">
+          <h2 className="mt-6 font-serif text-5xl leading-[1.05] font-medium tracking-tight text-bone md:text-7xl">
             {t.hero.h1a}
             <span className="mt-3 block text-bone-dim">{t.hero.h1b}</span>
-          </h1>
+          </h2>
           <p className="mt-8 max-w-2xl text-xl leading-snug text-bone-dim">{t.hero.lead}</p>
           <a
-            href="https://github.com/LucasHRAlmeida/capex-ia-o-esbanjamento/blob/main/TESE.md"
-            target="_blank"
-            rel="noreferrer"
+            href="#manifesto"
             className="mt-6 inline-flex min-h-12 items-center gap-2 border border-oxide bg-oxide/10 px-6 py-3 text-sm font-semibold text-oxide transition-colors hover:bg-oxide hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxide"
           >
-            {t.ui.manifesto}
+            Manifesto original
           </a>
         </div>
         <aside className="flex flex-col justify-end border-t border-line pt-6 md:col-span-4 md:border-t-0 md:border-l md:pt-0 md:pl-8">
